@@ -25,9 +25,8 @@
 nmap ; :
 
 
-" Keep the backup files and the swap files in one place, so that we don't
-" clutter our filesystem.  These directories must exist - Vim will not create
-" them for us.
+" Don't clutter our filesystem!  Keep all backup files and all swap files in
+" one place.  These directories must exist - Vim will not create them for us.
 set backupdir=~/.vim/backup
 set directory=~/.vim/tmp
 
