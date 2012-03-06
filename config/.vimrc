@@ -19,20 +19,20 @@
 "----------------------------------------------------------------------------"
 
 
-" Save our left pinky!  Map the semicolon to the colon in Normal mode (to
+" Save our left pinkies!  In Normal mode, map the semicolon to the colon (to
 " switch to Command-line mode).  This prevents us from having to press the
 " left shift key to type a colon.
 nmap ; :
 
 
-" Don't clutter our filesystem!  Keep all backup files and all swap files in
-" one place.  These directories must exist - Vim will not create them for us.
+" Don't clutter our filesystems!  Keep all backup and swap files in one place.
+" These directories must exist - Vim does not create them for us.
 set backupdir=~/.vim/backup
 set directory=~/.vim/tmp
 
 
-" When a file has been detected to have been changed outside of Vim and it has
-" not been changed inside of Vim, automatically read it again.
+" When a file is changed outside of Vim but hasn't been changed inside of Vim,
+" automatically read the file again.
 set autoread
 
 
@@ -63,7 +63,8 @@ autocmd FileType ruby setlocal tabstop=2
 set backspace=indent,eol,start
 
 
-" Automatically reload .vimrc whenever it's saved.
+" Whenever we save our ~/.vimrc files, automatically reload our configuration
+" changes.
 autocmd BufWritePost ~/.vimrc source ~/.vimrc
 
 
