@@ -3,3 +3,11 @@
         <h1>Chirp</h1>
     <hgroup>
 </header>
+
+<article>
+    <section>
+        <% @posts.each do |post| %>
+            <p><%= post.body %></p>
+        <% end %>
+    </section>
+</article>
