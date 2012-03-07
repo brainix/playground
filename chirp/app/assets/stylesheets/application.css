@@ -10,4 +10,60 @@
  *
  *= require_self
  *= require_tree .
-*/
+ */
+
+
+/*---------------------------------------------------------------------------*\
+ |                                Basic Styles                               |
+\*---------------------------------------------------------------------------*/
+
+* {
+    margin: 0;
+    outline: 0;
+    padding: 0;
+    text-transform: lowercase;
+}
+
+body {
+    background: #FFFFFF;
+    clear: both;
+    color: #516064;
+    font-family: "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, arial, sans-serif;
+    font-weight: 300;
+    margin: 0 auto 0 auto;
+    width: 640px;
+}
+
+
+/*---------------------------------------------------------------------------*\
+ |                               Heading Styles                              |
+\*---------------------------------------------------------------------------*/
+
+header {
+    margin-bottom: 42px;
+}
+
+header hgroup h1 {
+    color: #D1D9DC;
+    font-size: 102px;
+    letter-spacing: -4px;
+    margin-top: -15px;
+    margin-left: -3px;
+    margin-bottom: -20px;
+}
+
+
+/*---------------------------------------------------------------------------*\
+ |                               Content Styles                              |
+\*---------------------------------------------------------------------------*/
+
+article {
+    margin-bottom: 50px;
+}
+
+article p {
+    font-size: 16px;
+    line-height: 175%;
+    margin-bottom: 28px;
+    width: 75%;
+}
