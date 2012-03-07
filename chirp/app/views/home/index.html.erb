@@ -6,6 +6,13 @@
 
 <article>
     <section>
+        <textarea id="post" cols="40" rows="4">What&rsquo;s on your mind?</textarea>
+        <div id="countdown-container">
+            <span id="countdown">140</span>
+        </div>
+    </section>
+
+    <section>
         <% @posts.each do |post| %>
             <p><%= post.body %></p>
         <% end %>
