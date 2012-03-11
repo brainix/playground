@@ -21,12 +21,52 @@
 #----------------------------------------------------------------------------#
 
 
+
+require 'set'
+
+
+
+def is_pangram(sentence)
+
+  # Lowercase the sentence.
+  letters = sentence.downcase
+
+  # Strip out all of the non-lowercase-letter characters.  The gsub! method
+  # modifies the string in place, whereas the gsub method does not.
+  letters.gsub!(/[^a-z]/i, '')
+
+  # A Ruby string isn't enumerable.  But a Ruby string has a method, chars,
+  # which returns an enumerator.
+  letters = letters.chars
+
+  # Construct a set out of the lowercase letters, effectively deduplicating the
+  # lowercase letters.
+  letters = Set.new(letters)
+
+  # If the sentence was a pangram, our letters set must contain 26 elements.
+  letters.size == 26
+
+  # A Ruby function can have an explicit return statement, but doesn't require
+  # it.  A Ruby function implicitly returns the value of its last evaluated
+  # statement.  Good Ruby style is to only use an explicit return statement to
+  # terminate a function early (for example, from within an if statement).
+
+# Indented Ruby code requires an explicit end statement.
+end
+
+
+
 # This is how Ruby determines if a script is run from the command line or
 # included from another script.
 if __FILE__ == $0
 
-  # OK, we were run from the command line.
-  puts "Hello, World!"
+  # Join all of the command-line arguments into one space-separated string.
+  sentence = ARGV.join(' ')
 
-# Ruby requires end statements to close if statements.
+  if is_pangram(sentence)
+    puts('is a pangram')
+  else
+    puts('is NOT a pangram')
+  end
+
 end
