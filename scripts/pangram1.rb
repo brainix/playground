@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 #----------------------------------------------------------------------------#
-#   pangram.rb                                                               #
+#   pangram1.rb                                                              #
 #                                                                            #
 #   Copyright (c) 2012, Rajiv Bakulesh Shah, original author.                #
 #                                                                            #
