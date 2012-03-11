@@ -39,8 +39,8 @@ set autoread
 " Enable file type detection, load the plugins for specific file types, and
 " load the indent files for specific file types.
 filetype on
-filetype plugin on
-filetype indent on
+" filetype plugin on
+" filetype indent on
 
 
 " Configure sane tab behavior...
@@ -65,7 +65,7 @@ set backspace=indent,eol,start
 
 " Whenever we save our ~/.vimrc files, automatically reload our configuration
 " changes.
-autocmd BufWritePost ~/.vimrc source ~/.vimrc
+" autocmd BufWritePost ~/.vimrc source ~/.vimrc
 
 
 " We're on a fast terminal connection, so send more characters for smoother
