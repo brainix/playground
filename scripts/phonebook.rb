@@ -46,8 +46,15 @@ class PhoneBook
 
   private
 
+  # Validate phone number input.  Ensure it's of the form: 713-725-8220  Then
+  # strip out the hyphens.
   def validate_input(s)
-    s
+    regex = /^\d{3}-\d{3}-\d{4}$/
+    match = s =~ regex
+    if match.nil?
+      raise ArgumentError, 'phone number must be of form: 713-725-8220'
+    end
+    s.gsub(/[^0-9]/, '')
   end
 
   # This Node class implements an n-ary tree that represents a phone book.  The
