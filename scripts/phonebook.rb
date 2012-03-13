@@ -55,42 +55,26 @@ class PhoneBook
   #
   # Each node in the tree represents one digit in at least one phone number.
   # The memory win, though, is that a node could represent a digit in multiple
-  # phone numbers.  I can best illustrate this through an example:
+  # phone numbers.  If two phone numbers start with the same area code, their
+  # traversal paths down the tree start with the same three nodes, then
+  # diverge.  The full phone numbers aren't stored anywhere in the tree, but
+  # can be derived through their traversal paths.  Each path down the tree
+  # represents one phone number.
   #
-  # Suppose we start with an empty phone book and add the number 713-725-8220.
-  # We give the root node a '7' child, that '7' node a '1' child, that '1' node
-  # a '3' child, that '3' node a '7' child, and so on.
-  #
-  # Then suppose I add a second number 713-894-4246.  The root node already has
-  # a '7' child, which already has a '1' child, which already has a '3' child
-  # from the first number!  So when adding this second number, we don't
-  # duplicate this already stored data.  We simply traverse the tree and
-  # diverge at the '3' node.  The '3' node has a '7' child from the first
-  # number.  So for our second number, we give the '3' node an '8' child and
-  # continue from there.
-  #
-  # This implementation is elegant and memory-efficient, but it has some
+  # This implementation is elegant and memory-efficient, but has some
   # drawbacks:
   #   1.  No duplicate phone numbers.
   #   2.  No way to differentiate a part from a whole.
-  #       A.  If I were to add 713-725-8220, then look up 713 - the phone book
-  #           would report that 713 exists.
-  #       B.  If I were to add 713-725-8220, then add 713, then remove 713,
-  #           then look up 713 - the phone book would report that 713 exists.
-  #       C.  If I were to add 713, then add 713-725-8220, then remove
-  #           713-725-8220, then look up 713 - the phone book would report that
-  #           713 doesn't exist.
-  #   4.  Recursion.  If Ruby is like Python, method calls are expensive, so
-  #       recursion probably isn't the most efficient approach.
+  #       A.  Add 713-725-8220, then look up 713 - the tree reports that 713
+  #           exists.
+  #       B.  Add 713, then add 713-725-8220, then remove 713-725-8220, then
+  #           look up 713 - the tree reports that 713 doesn't exist.
+  #   3.  No way to meaningfully sort phone numbers.
+  #   4.  Recursion probably isn't the most efficient approach.
   #
-  # However, we're targetting clean and well ordered data (only phone numbers,
-  # not arbitrary strings).  We take advantage of the memory savings because
-  # there's lots of repeated data in the area codes alone.  We don't care about
-  # the part/whole problem because we add, look up, and remove only complete
-  # 10-digit phone numbers.  We don't care about the cost of recursion because
-  # in the worst case, we only make 10 recursive method calls (so the clarity
-  # of recursion beats the efficiency of iteration).  This seems like a good
-  # approach.
+  # However, we're targetting well ordered data (only 10-digit phone numbers,
+  # not arbitrary strings) for a specific use case.  So for us, the advantages
+  # outweigh the disadvantages.
   class Node
 
     attr_reader :children
