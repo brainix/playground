@@ -36,14 +36,16 @@ def is_pangram(sentence)
   letters.gsub!(/[^a-z]/i, '')
 
   # A Ruby string isn't enumerable.  But a Ruby string has a method, chars,
-  # which returns an enumerator.
+  # which returns an enumerator.  We need an enumerator, because that's what
+  # the Set constructor expects, and we want to construct a Set.
   letters = letters.chars
 
   # Construct a set out of the lowercase letters, effectively deduplicating the
   # lowercase letters.
   letters = Set.new(letters)
 
-  # If the sentence was a pangram, our letters set must contain 26 elements.
+  # If the sentence is a pangram, our letters set must contain exactly 26
+  # elements.
   letters.size == 26
 
   # A Ruby function can have an explicit return statement, but doesn't require

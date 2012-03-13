@@ -29,7 +29,7 @@ require 'set'
 # class.  However, we want to do this in a kind, gentle way.  Therefore, we're
 # going to create a module, with our own String class, with our method that
 # we're going to tack on Ruby's String class.  We jump through these hoops so
-# that String.ancestors shows our module::class to help others debug.
+# that String.ancestors shows our module to help others debug.
 #
 # For more information, see:
 #   http://johnragan.wordpress.com/2010/02/22/safer-monkey-patching/
