@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 #----------------------------------------------------------------------------#
-#   phonebook1.rb                                                            #
+#   phonebook.rb                                                             #
 #                                                                            #
 #   Copyright (c) 2012, Rajiv Bakulesh Shah, original author.                #
 #                                                                            #
