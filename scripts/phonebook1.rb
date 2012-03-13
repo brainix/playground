@@ -29,19 +29,21 @@ class PhoneBook
     @node = Node.new
   end
 
-  def insert(s)
+  def add(s)
     s = validate_input(s)
-    @node.insert(s)
-  end
-
-  def find(s)
-    s = validate_input(s)
-    @node.find(s)
+    @node.add(s)
+    self
   end
 
   def delete(s)
     s = validate_input(s)
     @node.delete(s)
+    self
+  end
+
+  def include?(s)
+    s = validate_input(s)
+    @node.include?(s)
   end
 
   private
@@ -90,17 +92,12 @@ class PhoneBook
       @children = {}
     end
 
-    def insert(s)
+    def add(s)
       unless s.empty?
         @children[s[0]] = Node.new if @children[s[0]].nil?
-        @children[s[0]].insert(s[1..-1])
+        @children[s[0]].add(s[1..-1])
       end
-    end
-
-    def find(s)
-      return true if s.empty?
-      return false if @children[s[0]].nil?
-      @children[s[0]].find(s[1..-1])
+      self
     end
 
     def delete(s)
@@ -108,6 +105,13 @@ class PhoneBook
         @children[s[0]].delete(s[1..-1]) unless @children[s[0]].nil?
         @children.delete(s[0]) if @children[s[0]].children.empty?
       end
+      self
+    end
+
+    def include?(s)
+      return true if s.empty?
+      return false if @children[s[0]].nil?
+      @children[s[0]].include?(s[1..-1])
     end
 
   end
