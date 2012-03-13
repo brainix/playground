@@ -29,7 +29,8 @@ require 'set'
 class Pangram < String
 
   # Ruby has private methods.  Every method after this line until the end of
-  # the class definition is private.
+  # the class definition is private.  (Though, this isn't necessary for the
+  # initialize method since it's private by default.)
   private
 
   # Override the String class's initialize method.  Only allow pangrams to be

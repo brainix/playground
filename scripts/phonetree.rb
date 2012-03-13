@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 #----------------------------------------------------------------------------#
-#   phonetree.rb                                                             #
+#   phonebook1.rb                                                            #
 #                                                                            #
 #   Copyright (c) 2012, Rajiv Bakulesh Shah, original author.                #
 #                                                                            #
@@ -21,26 +21,52 @@
 #----------------------------------------------------------------------------#
 
 
-class PhoneTree
+# This PhoneBook class is a wrapper around the Node class.  The interesting
+# stuff is in the Node class below.
+class PhoneBook
 
   def initialize
     @node = Node.new
   end
 
   def insert(s)
+    s = validate_input(s)
     @node.insert(s)
   end
 
   def find(s)
+    s = validate_input(s)
     @node.find(s)
   end
 
   def delete(s)
+    s = validate_input(s)
     @node.delete(s)
   end
 
   private
 
+  def validate_input(s)
+    s
+  end
+
+  # This Node class implements an n-ary tree that represents a phone book.  The
+  # tree allows us to add, look up, and delete phone numbers.
+  #
+  # Each node in the tree represents one digit in at least one phone number.
+  # The memory win, though, is that a node could represent a digit in multiple
+  # phone numbers.  I can best illustrate this through an example:
+  #
+  # Suppose I start with an empty phone book and add the number 713-725-8220.
+  # We give the root node a '7' child, that '7' node a '1' child, that '1' node
+  # a '3' child, that '3' node a '7' child, and so on.
+  #
+  # Then suppose I add the number 713-894-4246.  The root node already has a
+  # '7' child, which already has a '1' child, which already has a '3' child!
+  # So when inserting this new number, we don't duplicate this already stored
+  # data.  We simply traverse the tree and diverge at the '3' node.  The '3'
+  # node already has a '7' child from the first number.  So for our second
+  # number, we give the '3' node an '8' child and continue from there.
   class Node
 
     attr_reader :children
