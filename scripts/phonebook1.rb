@@ -93,25 +93,32 @@ class PhoneBook
     end
 
     def add(s)
-      unless s.empty?
-        @children[s[0]] = Node.new unless @children[s[0]]
-        @children[s[0]].add(s[1..-1])
+      if s.any?
+        # Get the first character off of the string.  Modify the string in
+        # place.
+        c = s.slice!(0).chr
+        @children[c] = Node.new unless @children[c]
+        @children[c].add(s)
       end
       self
     end
 
     def delete(s)
-      if s.any? and @children[s[0]]
-        @children[s[0]].delete(s[1..-1])
-        @children.delete(s[0]) if @children[s[0]].children.empty?
+      if s.any?
+        c = s.slice!(0).chr
+        if @children[c]
+          @children[c].delete(s)
+          @children.delete(c) if @children[c].children.empty?
+        end
       end
       self
     end
 
     def include?(s)
       return true if s.empty?
-      return false unless @children[s[0]]
-      @children[s[0]].include?(s[1..-1])
+      c = s.slice!(0).chr
+      return false unless @children[c]
+      @children[c].include?(s)
     end
 
   end
