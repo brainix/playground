@@ -28,7 +28,9 @@ require 'set'
 
 def is_pangram(sentence)
 
-  # Lowercase the sentence.
+  # Lowercase the sentence.  Parenthesis are optional for a Ruby method call.
+  # We customarily leave them off whenever we call a method and don't pass it
+  # any arguments.
   letters = sentence.downcase
 
   # Strip out all of the non-lowercase-letter characters.  The gsub! method
@@ -58,8 +60,8 @@ end
 
 
 
-# This is how Ruby determines if a script is run from the command line or
-# included from another script.
+# This is how Ruby determines if a script is run from the command line, or
+# loaded from another script or within the interactive interpreter.
 if __FILE__ == $0
 
   # Join all of the command-line arguments into one space-separated string.

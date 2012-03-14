@@ -53,7 +53,7 @@ class PhoneBook
   def validate_input(s)
     regex = /^\d{3}-\d{3}-\d{4}$/
     match = s =~ regex
-    if match.nil?
+    unless match
       raise ArgumentError, 'phone number must be of form: 713-725-8220'
     end
     s.gsub(/[^0-9]/, '')
@@ -94,7 +94,7 @@ class PhoneBook
 
     def add(s)
       unless s.empty?
-        @children[s[0]] = Node.new if @children[s[0]].nil?
+        @children[s[0]] = Node.new unless @children[s[0]]
         @children[s[0]].add(s[1..-1])
       end
       self
@@ -110,7 +110,7 @@ class PhoneBook
 
     def include?(s)
       return true if s.empty?
-      return false if @children[s[0]].nil?
+      return false unless @children[s[0]]
       @children[s[0]].include?(s[1..-1])
     end
 

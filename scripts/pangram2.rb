@@ -28,11 +28,6 @@ require 'set'
 # String.
 class Pangram < String
 
-  # Ruby has private methods.  Every method after this line until the end of
-  # the class definition is private.  (Though, this isn't necessary for the
-  # initialize method since it's private by default.)
-  private
-
   # Override the String class's initialize method.  Only allow pangrams to be
   # set in our Pangram class, then call the String class's initialize method,
   # then freeze our Pangram instance (make our Pangram instance immutable).
@@ -41,6 +36,11 @@ class Pangram < String
     super
     self.freeze
   end
+
+  # Ruby has private methods.  Every method after this line until the end of
+  # the class definition is private.  (Though, this isn't necessary for the
+  # initialize method since it's private by default.)
+  private
 
   def is_pangram(s)
     letters = s.downcase
