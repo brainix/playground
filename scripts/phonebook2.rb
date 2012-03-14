@@ -37,8 +37,26 @@ class PhoneBook
   # technique for URL routing/dispatch.
   def method_missing(name, *args, &block)
     if ['add', 'delete', 'include?'].include?(name.to_s)
+
+      # At first, I'd done this:
+      #   s = args[0]
+      #   s = validate_input(s)
+      #   @node.send(name, s)
+      #
+      # This was problematic, because someone could've called our add, delete,
+      # and include? methods with the wrong number of arguments.  As long as
+      # the first argument was a string, they wouldn't have even gotten an
+      # exception/traceback.
+      #
+      # The way it's implemented now, people will get the expected
+      # exceptions/tracebacks if they call our methods with the wrong number of
+      # arguments, or the wrong type of arguments.  This will make someone's
+      # middle-of-the-night debugging session much easier (probably mine).  ;-)
+      #
+      # I spend so much of my life trying to outsmart my past or future self.
       args[0] = validate_input(*args)
       val = @node.send(name, *args)
+
       val = name.to_s == 'include?' ? val : self
       return val
     else
