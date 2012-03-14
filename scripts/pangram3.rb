@@ -39,7 +39,7 @@ module Pangram
     rake_extension('is_pangram') do
       def is_pangram
         letters = self.downcase
-        letters.gsub!(/[^a-z]/i, '')
+        letters.gsub!(/[^a-z]/, '')
         letters = letters.chars
         letters = Set.new(letters)
         letters.size == 26

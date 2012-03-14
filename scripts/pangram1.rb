@@ -35,7 +35,7 @@ def is_pangram(sentence)
 
   # Strip out all of the non-lowercase-letter characters.  The gsub! method
   # modifies the string in place, whereas the gsub method does not.
-  letters.gsub!(/[^a-z]/i, '')
+  letters.gsub!(/[^a-z]/, '')
 
   # A Ruby string isn't enumerable.  But a Ruby string has a method, chars,
   # which returns an enumerator.  We need an enumerator, because that's what

@@ -44,7 +44,7 @@ class Pangram < String
 
   def is_pangram(s)
     letters = s.downcase
-    letters.gsub!(/[^a-z]/i, '')
+    letters.gsub!(/[^a-z]/, '')
     letters = letters.chars
     letters = Set.new(letters)
     letters.size == 26
