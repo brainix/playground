@@ -25,19 +25,19 @@ require 'rake'
 require 'set'
 
 
-# We're going to monkey patch our own is_pangram method into Ruby's String
-# class.  However, we want to do this in a kind, gentle way.  Therefore, we're
-# going to create a module, with our own String class, with our method that
-# we're going to tack on Ruby's String class.  We jump through these hoops so
-# that String.ancestors shows our module to help others debug.
+# We're going to monkey patch our own pangram? method into Ruby's String class.
+# However, we want to do this in a kind, gentle way.  Therefore, we're going to
+# create a module, with our own String class, with our method that we're going
+# to tack on Ruby's String class.  We jump through these hoops so that
+# String.ancestors shows our module to help others debug.
 #
 # For more information, see:
 #   http://johnragan.wordpress.com/2010/02/22/safer-monkey-patching/
 
 module Pangram
   module String
-    rake_extension('is_pangram') do
-      def is_pangram
+    rake_extension('pangram?') do
+      def pangram?
         letters = self.downcase
         letters.gsub!(/[^a-z]/, '')
         letters = letters.chars
@@ -56,7 +56,7 @@ end
 
 if __FILE__ == $0
   sentence = ARGV.join(' ')
-  if sentence.is_pangram
+  if sentence.pangram?
     puts('is a pangram')
   else
     puts('is NOT a pangram')

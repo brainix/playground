@@ -32,7 +32,7 @@ class Pangram < String
   # set in our Pangram class, then call the String class's initialize method,
   # then freeze our Pangram instance (make our Pangram instance immutable).
   def initialize(s)
-    raise ArgumentError, 'string is not a pangram' unless is_pangram(s)
+    raise ArgumentError, 'string is not a pangram' unless pangram?(s)
     super
     self.freeze
   end
@@ -42,7 +42,7 @@ class Pangram < String
   # initialize method since it's private by default.)
   private
 
-  def is_pangram(s)
+  def pangram?(s)
     letters = s.downcase
     letters.gsub!(/[^a-z]/, '')
     letters = letters.chars

@@ -26,7 +26,7 @@ require 'set'
 
 
 
-def is_pangram(sentence)
+def pangram?(sentence)
 
   # Lowercase the sentence.  Parenthesis are optional for a Ruby method call.
   # We customarily leave them off whenever we call a method and don't pass it
@@ -67,7 +67,7 @@ if __FILE__ == $0
   # Join all of the command-line arguments into one space-separated string.
   sentence = ARGV.join(' ')
 
-  if is_pangram(sentence)
+  if pangram?(sentence)
     puts('is a pangram')
   else
     puts('is NOT a pangram')
