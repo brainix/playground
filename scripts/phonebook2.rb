@@ -27,6 +27,14 @@ class PhoneBook
     @node = Node.new
   end
 
+  # In phonebook1.rb, look at the PhoneBook class, specifically the add,
+  # delete, and include? methods.  Don't Repeat Yourself.  :-)
+  #
+  # This is overkill for just three methods, but I wanted to learn some of the
+  # more framework-y aspects of Ruby.  I wanted to learn more about Ruby's
+  # object model, and use method_missing and object message sending to make a
+  # dynamic method dispatcher.  If I understand correctly, Rails uses a similar
+  # technique for URL routing/dispatch.
   def method_missing(name, *args, &block)
     if ['add', 'delete', 'include?'].include?(name.to_s)
       args[0] = validate_input(*args)
@@ -49,6 +57,12 @@ class PhoneBook
     s.gsub(/[^0-9]/, '')
   end
 
+  # In terms of the interface, this Node class is identical to the Node class
+  # defined in phonebook1.rb.  (The two Node classes are even idental in terms
+  # of internal data structures.)  However, the two Node classes differ in
+  # implementation/algorithms.  The Node class in phonebook1.rb uses recursion,
+  # which is cleaner.  This Node class uses iteration, which is probably more
+  # efficient.  (I haven't profiled either implementation; I probably should.)
   class Node
 
     attr_reader :children
@@ -60,24 +74,39 @@ class PhoneBook
     def add(s)
       node = self
       while s.any?
+        # Get the next digit of the phone number.
         c = s.slice!(0).chr
+
+        # Create a child node corresponding to that digit, if it doesn't
+        # already exist.
         node.children[c] = Node.new unless node.children[c]
+
+        # Traverse to that child node.
         node = node.children[c]
       end
       self
     end
 
     def delete(s)
-      node, nodes, traversed = self, [], true
+      # Walk down the tree, saving the path corresponding to the phone number
+      # to be deleted.  Iff we're able to fully traverse each digit of the
+      # phone number, the phone number exists within our tree.
+      node, path, traversed = self, [], true
       while s.any? and node and traversed
         c = s.slice!(0).chr
         traversed = not node.children[c].nil?
-        nodes.push([node, c]) if traversed
+        path.push([node, c]) if traversed
         node = node.children[c] if traversed
       end
 
+      # Iff the phone number exists within our tree, walk back up its path,
+      # deleting the no longer necessary nodes corresponding to the digits of
+      # the phone number.  We have to be careful because the entire point of
+      # this data structure is to save memory by sharing nodes between multiple
+      # phone numbers.  So we can only delete nodes solely used by the phone
+      # number to be deleted (and no other phone numbers).
       if traversed
-        nodes.reverse_each do |node, c|
+        path.reverse_each do |node, c|
           kept = node.children[c].children.any?
           node.children.delete(c) unless kept
           break if kept
