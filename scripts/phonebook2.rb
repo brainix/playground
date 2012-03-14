@@ -58,11 +58,12 @@ class PhoneBook
   end
 
   # In terms of the interface, this Node class is identical to the Node class
-  # defined in phonebook1.rb.  (The two Node classes are even idental in terms
-  # of internal data structures.)  However, the two Node classes differ in
-  # implementation/algorithms.  The Node class in phonebook1.rb uses recursion,
-  # which is cleaner.  This Node class uses iteration, which is probably more
-  # efficient.  (I haven't profiled either implementation; I probably should.)
+  # defined in phonebook1.rb.  (The two Node classes are even identical in
+  # terms of internal data structures.)  However, the two Node classes differ
+  # in implementation/algorithms.  The Node class in phonebook1.rb uses
+  # recursion, which is cleaner.  This Node class uses iteration, which is
+  # probably more efficient.  (I haven't profiled either implementation; I
+  # probably should.)
   class Node
 
     attr_reader :children
