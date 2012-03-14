@@ -29,7 +29,7 @@ class PhoneBook
 
   def method_missing(name, *args, &block)
     if ['add', 'delete', 'include?'].include?(name.to_s)
-      s = validate_input(*args)
+      args[0] = validate_input(*args)
       val = @node.send(name, *args)
       val = name.to_s == 'include?' ? val : self
       return val
@@ -43,7 +43,7 @@ class PhoneBook
   def validate_input(s)
     regex = /^\d{3}-\d{3}-\d{4}$/
     match = s =~ regex
-    if match.nil?
+    unless match
       raise ArgumentError, 'phone number must be of form: 713-725-8220'
     end
     s.gsub(/[^0-9]/, '')
@@ -58,25 +58,42 @@ class PhoneBook
     end
 
     def add(s)
-      unless s.empty?
-        @children[s[0]] = Node.new if @children[s[0]].nil?
-        @children[s[0]].add(s[1..-1])
+      node = self
+      while s.any?
+        c = s.slice!(0).chr
+        node.children[c] = Node.new unless node.children[c]
+        node = node.children[c]
       end
       self
     end
 
     def delete(s)
-      if s.any? and @children[s[0]]
-        @children[s[0]].delete(s[1..-1])
-        @children.delete(s[0]) if @children[s[0]].children.empty?
+      node, nodes, traversed = self, [], true
+      while s.any? and node and traversed
+        c = s.slice!(0).chr
+        traversed = not node.children[c].nil?
+        nodes.push([node, c]) if traversed
+        node = node.children[c] if traversed
+      end
+
+      if traversed
+        nodes.reverse_each do |node, c|
+          kept = node.children[c].children.any?
+          node.children.delete(c) unless kept
+          break if kept
+        end
       end
       self
     end
 
     def include?(s)
-      return true if s.empty?
-      return false if @children[s[0]].nil?
-      @children[s[0]].include?(s[1..-1])
+      node = self
+      while s.any?
+        c = s.slice!(0).chr
+        node = node.children[c]
+        return false unless node
+      end
+      true
     end
 
   end
