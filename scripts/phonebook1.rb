@@ -115,10 +115,11 @@ class PhoneBook
     end
 
     def include?(s)
-      return true if s.empty?
-      c = s.slice!(0).chr
-      return false unless @children[c]
-      @children[c].include?(s)
+      if s.any?
+        c = s.slice!(0).chr
+        return @children[c] ? @children[c].include?(s) : false
+      end
+      true
     end
 
   end
