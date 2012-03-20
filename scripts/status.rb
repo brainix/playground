@@ -24,7 +24,23 @@
 require 'rbosa'
 
 
+APPS = {
+  'Finder' => 'Organizing files.',
+  #'Terminal' => 'Hacking.',
+  'Safari' => 'Browsing.',
+  'iChat' => 'Chatting.',
+  #'Mail' => 'Emailing.',
+  'iTunes' => 'Listening to music.',
+}
+
+
 if __FILE__ == $0
-  ichat = OSA.app('iChat')
-  ichat.status_message = 'Hello, World!'
+  APPS.each do |app, status_message|
+    app = OSA.app(app)
+    if app.frontmost?
+      ichat = OSA.app('iChat')
+      ichat.status_message = status_message
+      break
+    end
+  end
 end
