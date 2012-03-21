@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 #----------------------------------------------------------------------------#
-#   status.rb                                                                #
+#   status1.rb                                                               #
 #                                                                            #
 #   Copyright (c) 2012, Rajiv Bakulesh Shah, original author.                #
 #                                                                            #
@@ -26,10 +26,10 @@ require 'rbosa'
 
 APPS = {
   'Finder' => 'Organizing files.',
-  #'Terminal' => 'Hacking.',
+  'Terminal' => 'Hacking.',
   'Safari' => 'Browsing.',
   'iChat' => 'Chatting.',
-  #'Mail' => 'Emailing.',
+  'Mail' => 'Emailing.',
   'iTunes' => 'Listening to music.',
 }
 
