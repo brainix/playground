@@ -24,6 +24,13 @@
 " left shift key to type a colon.
 nmap ; :
 
+" Map Ctrl + h, j, k, and l to navigate left, down, up, and right between
+" splits, respectively.
+map <C-k> <C-w><Up>
+map <C-j> <C-w><Down>
+map <C-l> <C-w><Right>
+map <C-h> <C-w><Left>
+
 
 " Don't clutter our filesystems!  Keep all backup and swap files in one place.
 " These directories must exist - Vim does not create them for us.
