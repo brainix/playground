@@ -25,7 +25,6 @@ require 'appscript'
 
 
 class Safari
-
   include Appscript
 
   def initialize
@@ -41,7 +40,6 @@ class Safari
   end
 
   private
-
   def get_tabs
     windows, tabs = @safari.windows.get, []
     windows.each do |window|
@@ -49,7 +47,6 @@ class Safari
     end
     tabs
   end
-
 end
 
 
