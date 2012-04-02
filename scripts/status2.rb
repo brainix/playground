@@ -33,8 +33,7 @@ class Safari
   end
 
   def get_urls
-    tabs = get_tabs
-    urls = []
+    tabs, urls = get_tabs, []
     tabs.each do |tab|
       urls << tab.URL.get
     end
@@ -44,16 +43,11 @@ class Safari
   private
 
   def get_tabs
-    windows = get_windows
-    tabs = []
+    windows, tabs = @safari.windows.get, []
     windows.each do |window|
       tabs += window.tabs.get
     end
     tabs
-  end
-
-  def get_windows
-    @safari.windows.get
   end
 
 end
