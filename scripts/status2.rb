@@ -24,14 +24,10 @@
 require 'appscript'
 
 
-class Safari
-  include Appscript
+module Safari
+  @app = Appscript.app('Safari')
 
-  def initialize
-    @safari = app('Safari')
-  end
-
-  def get_urls
+  def self.get_urls
     tabs, urls = get_tabs, []
     tabs.each do |tab|
       urls << tab.URL.get
@@ -40,8 +36,8 @@ class Safari
   end
 
   private
-  def get_tabs
-    windows, tabs = @safari.windows.get, []
+  def self.get_tabs
+    windows, tabs = @app.windows.get, []
     windows.each do |window|
       tabs += window.tabs.get
     end
@@ -51,7 +47,6 @@ end
 
 
 if __FILE__ == $0
-  safari = Safari.new
-  urls = safari.get_urls
+  urls = Safari.get_urls
   puts urls
 end
