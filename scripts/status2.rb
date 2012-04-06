@@ -30,9 +30,8 @@ module Safari
   def self.get_pages
     tabs, pages = get_tabs, []
     tabs.each do |tab|
-      url = tab.URL.get
       page = {
-        'url' => url,
+        'url' => tab.URL.get,
         'title' => tab.name.get,
       }
       pages << page
