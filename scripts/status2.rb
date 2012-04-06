@@ -27,12 +27,17 @@ require 'appscript'
 module Safari
   @app = Appscript.app('Safari')
 
-  def self.get_urls
-    tabs, urls = get_tabs, []
+  def self.get_pages
+    tabs, pages = get_tabs, []
     tabs.each do |tab|
-      urls << tab.URL.get
+      url = tab.URL.get
+      page = {
+        'url' => url,
+        'title' => tab.name.get,
+      }
+      pages << page
     end
-    urls
+    pages
   end
 
   private
@@ -47,6 +52,6 @@ end
 
 
 if __FILE__ == $0
-  urls = Safari.get_urls
-  puts urls
+  pages = Safari.get_pages
+  puts pages
 end
