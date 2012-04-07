@@ -48,3 +48,9 @@ class Redirect
     end
   end
 end
+
+
+if __FILE__ == $0
+  redirect = Redirect.new('http://google.com/')
+  redirect.follow
+end
