@@ -25,16 +25,21 @@ require 'logger'
 require 'net/http'
 
 
-DEFAULT_REDIRECT_LIMIT = 20
-
-
 module Redirect
+  DEFAULT_HTTP_REDIRECT_LIMIT = 20
+
   class Error < StandardError; end
   class InfiniteRedirect < Error; end
   class TooManyRedirects < Error; end
 
+  def self.follow(url, limit=DEFAULT_HTTP_REDIRECT_LIMIT)
+    redirect = Redirect.new(url, limit=limit)
+    redirect.follow
+  end
+
+  private
   class Redirect
-    def initialize(url, limit=DEFAULT_REDIRECT_LIMIT)
+    def initialize(url, limit=DEFAULT_HTTP_REDIRECT_LIMIT)
       @urls = [url]
       @limit = limit
       @logger = Logger.new(STDOUT)
@@ -65,6 +70,5 @@ end
 
 
 if __FILE__ == $0
-  redirect = Redirect::Redirect.new('http://google.com/')
-  redirect.follow
+  Redirect::follow('http://google.com/')
 end
