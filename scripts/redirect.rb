@@ -21,7 +21,11 @@
 #----------------------------------------------------------------------------#
 
 
+require 'logger'
 require 'net/http'
+
+
+DEFAULT_REDIRECT_LIMIT = 20
 
 
 module Redirect
@@ -30,26 +34,31 @@ module Redirect
   class TooManyRedirects < Error; end
 
   class Redirect
-    def initialize(url)
+    def initialize(url, limit=DEFAULT_REDIRECT_LIMIT)
       @urls = [url]
+      @limit = limit
+      @logger = Logger.new(STDOUT)
+      @logger.level = Logger::DEBUG
     end
 
     def follow
+      @logger.debug('resolving ' + @urls[-1])
       uri = URI.parse(@urls[-1])
       response = Net::HTTP.get_response(uri)
       if response.kind_of?(Net::HTTPRedirection)
         @urls << response['location']
-        detect_infinite_redirects
+        @logger.info(@urls[-2] + ' redirected to ' + @urls[-1])
+        detect_loop
+        @logger.debug(@limit.to_s + ' redirects remaining')
         response = follow
       end
       response
     end
 
     private
-    def detect_infinite_redirects
-      if @urls[0..-2].include?(@urls[-1])
-        raise InfiniteRedirect
-      end
+    def detect_loop
+      raise InfiniteRedirect if @urls[0..-2].include?(@urls[-1])
+      raise TooManyRedirects if (@limit -= 1) <= 0
     end
   end
 end
