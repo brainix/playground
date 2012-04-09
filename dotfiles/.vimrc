@@ -19,6 +19,7 @@
 "----------------------------------------------------------------------------"
 
 
+
 " Save our left pinkies!  In Normal mode, map the semicolon to the colon (to
 " switch to Command-line mode).  This prevents us from having to press the
 " left shift key to type a colon.
@@ -32,15 +33,18 @@ map <C-l> <C-w><Right>
 map <C-h> <C-w><Left>
 
 
+
 " Don't clutter our filesystems!  Keep all backup and swap files in one place.
 " These directories must exist - Vim does not create them for us.
 set backupdir=~/.vim/backup
 set directory=~/.vim/tmp
 
 
+
 " When a file is changed outside of Vim but hasn't been changed inside of Vim,
 " automatically read the file again.
 set autoread
+
 
 
 " Enable file type detection, load the plugins for specific file types, and
@@ -50,24 +54,32 @@ filetype on
 " filetype indent on
 
 
+
 " Configure sane tab behavior...
 set expandtab
-set shiftwidth=4
-set softtabstop=4
-set tabstop=4
+
+" set shiftwidth=4
+" set softtabstop=4
+" set tabstop=4
+
+set shiftwidth=2
+set softtabstop=2
+set tabstop=2
+
 set smarttab
 set autoindent
 
-
 " ...except when editing Ruby files.  ;-)  When editing Ruby files, use two
 " spaces for tabs.
-autocmd FileType ruby setlocal shiftwidth=2
-autocmd FileType ruby setlocal softtabstop=2
-autocmd FileType ruby setlocal tabstop=2
+" autocmd FileType ruby setlocal shiftwidth=2
+" autocmd FileType ruby setlocal softtabstop=2
+" autocmd FileType ruby setlocal tabstop=2
+
 
 
 " Allow backspacing over autoindents, line breaks, and the starts of inserts.
 set backspace=indent,eol,start
+
 
 
 " Whenever we save our ~/.vimrc files, automatically reload our configuration
@@ -75,10 +87,10 @@ set backspace=indent,eol,start
 " autocmd BufWritePost ~/.vimrc source ~/.vimrc
 
 
+
 " We're on a fast terminal connection, so send more characters for smoother
 " redrawing.
 set ttyfast
-
 
 set background=dark
 set ruler

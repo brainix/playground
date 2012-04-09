@@ -29,7 +29,7 @@ module Redirect
   DEFAULT_HTTP_REDIRECT_LIMIT = 20
 
   class Error < StandardError; end
-  class InfiniteRedirect < Error; end
+  class RedirectLoop < Error; end
   class TooManyRedirects < Error; end
 
   def self.follow(url, limit=DEFAULT_HTTP_REDIRECT_LIMIT)
@@ -62,7 +62,7 @@ module Redirect
 
     private
     def detect_loop
-      raise InfiniteRedirect if @urls[0..-2].include?(@urls[-1])
+      raise RedirectLoop if @urls[0..-2].include?(@urls[-1])
       raise TooManyRedirects if (@limit -= 1) <= 0
     end
   end
