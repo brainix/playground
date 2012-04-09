@@ -24,33 +24,38 @@
 require 'net/http'
 
 
-class Redirect
-  def initialize(url)
-    @urls = [url]
-  end
+module Redirect
+  class Error < StandardError; end
+  class InfiniteRedirect < Error; end
+  class TooManyRedirects < Error; end
 
-  def follow
-    uri = URI.parse(@urls[-1])
-    response = Net::HTTP.get_response(uri)
-    if response.kind_of?(Net::HTTPRedirection)
-      @urls << response['location']
-      detect_infinite_loop
-      response = follow
+  class Redirect
+    def initialize(url)
+      @urls = [url]
     end
-    response
-  end
 
-  private
-  def detect_infinite_loop
-    if @urls[0..-2].include?(@urls[-1])
-      # TODO: Raise a custom exception with a descriptive error message.
-      raise RuntimeError
+    def follow
+      uri = URI.parse(@urls[-1])
+      response = Net::HTTP.get_response(uri)
+      if response.kind_of?(Net::HTTPRedirection)
+        @urls << response['location']
+        detect_infinite_redirects
+        response = follow
+      end
+      response
+    end
+
+    private
+    def detect_infinite_redirects
+      if @urls[0..-2].include?(@urls[-1])
+        raise InfiniteRedirect
+      end
     end
   end
 end
 
 
 if __FILE__ == $0
-  redirect = Redirect.new('http://google.com/')
+  redirect = Redirect::Redirect.new('http://google.com/')
   redirect.follow
 end
