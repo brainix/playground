@@ -39,7 +39,7 @@ def pangram?(sentence)
 
   # A Ruby string isn't enumerable.  But a Ruby string has a method, chars,
   # which returns an enumerator.  We need an enumerator, because that's what
-  # the Set constructor expects, and we want to construct a Set.
+  # the set constructor expects, and we want to construct a set.
   letters = letters.chars
 
   # Construct a set out of the lowercase letters, effectively deduplicating the
