@@ -54,7 +54,7 @@ module Redirect
         @urls << response['location']
         @logger.info(@urls[-2] + ' redirected to ' + @urls[-1])
         detect_loop
-        @logger.debug(@limit.to_s + ' redirects remaining')
+        @logger.debug('%s redirects remaining' % @limit)
         response = follow
       end
       response
