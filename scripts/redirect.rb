@@ -39,22 +39,23 @@ module Redirect
 
   private
   class Redirect
+    @@logger = Logger.new(STDOUT)
+    @@logger.level = Logger::DEBUG
+
     def initialize(url, limit=DEFAULT_HTTP_REDIRECT_LIMIT)
       @urls = [url]
       @limit = limit
-      @logger = Logger.new(STDOUT)
-      @logger.level = Logger::DEBUG
     end
 
     def follow
-      @logger.debug('resolving ' + @urls[-1])
+      @@logger.debug('resolving ' + @urls[-1])
       uri = URI.parse(@urls[-1])
       response = Net::HTTP.get_response(uri)
       if response.kind_of?(Net::HTTPRedirection)
         @urls << response['location']
-        @logger.info(@urls[-2] + ' redirected to ' + @urls[-1])
+        @@logger.info(@urls[-2] + ' redirected to ' + @urls[-1])
         detect_loop
-        @logger.debug('%d redirects remaining' % @limit)
+        @@logger.debug('%d redirects remaining' % @limit)
         response = follow
       end
       response
