@@ -31,8 +31,8 @@ module Safari
     tabs, pages = get_tabs, []
     tabs.each do |tab|
       page = {
-        'url' => tab.URL.get,
-        'title' => tab.name.get,
+        url: tab.URL.get,
+        title: tab.name.get,
       }
       pages << page
     end
