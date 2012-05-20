@@ -130,5 +130,7 @@ end
 
 
 if __FILE__ == $0
-  puts FLICKR::SEARCH.unsafe_search('skirt')
+  query = ARGV.join(' ')
+  urls = puts FLICKR::SEARCH.unsafe_search(query)
+  puts urls
 end
