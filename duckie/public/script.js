@@ -28,12 +28,12 @@ function Duckie() {
 
 Duckie.prototype.search = function() {
   var query = $("[name='query']").val();
-  $.get(
-    '/search',
-    {query: query},
-    function(data) {
-      alert(template);
-      alert(data[0]);
+  $.get('/search', {query: query}, function(data) {
+      $.each(data, function(indexInArray, valueOfElement) {
+        var img = $(template);
+        img.attr('src', valueOfElement);
+        img.appendTo('#results');
+      });
     }
   );
   return false;
