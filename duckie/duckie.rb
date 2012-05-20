@@ -22,8 +22,19 @@
 
 require 'sinatra'
 
+load 'flickr.rb'
+
 
 
 get '/' do
   'Hello, World!'
+end
+
+
+
+get '/search' do
+  content_type :json
+  query = params['query']
+  results = FLICKR::SEARCH.unsafe_search(query)
+  results.to_json
 end
