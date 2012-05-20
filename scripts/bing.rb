@@ -30,7 +30,7 @@ require 'URI'
 
 
 module Bing
-  ACCOUNT_KEY = ''
+  ACCOUNT_KEY = 'vwg49S0132p4mwVBpBL4p4GXTAhQyXU9PJoLnzpsXnE='
 
   module Image
     URL = 'https://api.datamarket.azure.com/Bing/Search/Image'
@@ -84,7 +84,8 @@ module Bing
       uri = URI(url)
       http = Net::HTTP.new(uri.host, uri.port)
       http.use_ssl = uri.scheme == 'https'
-      request = Net::HTTP::Get.new(uri.path + '?' + uri.query)
+      query = uri.query.nil? ? '' : ('?' + uri.query)
+      request = Net::HTTP::Get.new(uri.path + query)
       request.basic_auth('', ACCOUNT_KEY)
       response = http.request(request)
       response.body
