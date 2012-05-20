@@ -18,3 +18,15 @@
  |           <http://www.gnu.org/licenses/>.                                 |
 \*---------------------------------------------------------------------------*/
 
+
+
+* {
+  margin: 0;
+  outline: 0;
+  padding: 0;
+}
+
+.result {
+  max-width: 192px;
+  max-height: 192px;
+}
