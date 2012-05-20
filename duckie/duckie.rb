@@ -26,8 +26,12 @@ load 'flickr.rb'
 
 
 
+set :haml, :format => :html5
+
+
+
 get '/' do
-  'Hello, World!'
+  haml :index
 end
 
 
