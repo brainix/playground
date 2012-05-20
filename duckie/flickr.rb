@@ -132,6 +132,6 @@ end
 
 if __FILE__ == $0
   query = ARGV.join(' ')
-  urls = puts FLICKR::SEARCH.unsafe_search(query)
-  puts urls
+  results = puts FLICKR::SEARCH.unsafe_search(query)
+  results urls
 end
