@@ -21,9 +21,11 @@
 #----------------------------------------------------------------------------#
 
 
+
 require 'logger'
 
 require 'flickraw'
+
 
 
 module FLICKR
@@ -33,14 +35,13 @@ module FLICKR
   ACCESS_TOKEN = '72157629811083772-7ce62b48f55d76e6'
   ACCESS_SECRET = '8011fd19f6a0c19e'
 
-  @@logger = Logger.new(STDOUT)
-  @@logger.level = Logger::DEBUG
+
 
   module AUTHORIZATION
     def self.authorize
       token, auth_url = get_auth_url
       verifier = verify(auth_url)
-      login(token, verifier)
+      log_in(token, verifier)
     end
 
     private
@@ -60,7 +61,7 @@ module FLICKR
       verifier
     end
 
-    def self.login(token, verifier)
+    def self.log_in(token, verifier)
       flickr.get_access_token(token['oauth_token'], token['oauth_token_secret'], verifier)
       login = flickr.test.login
       puts 'Username: ' + login.username
@@ -69,22 +70,57 @@ module FLICKR
     end
   end
 
-  def self.unsafe_search(query)
-    login
-  end
 
-  private
-  def self.login
-    FlickRaw.api_key = API_KEY
-    FlickRaw.shared_secret = API_SECRET
-    flickr.access_token = ACCESS_TOKEN
-    flickr.access_secret = ACCESS_SECRET
-    login = flickr.test.login
-    @@logger.debug('logged in as: ' + login.username)
+
+  module SEARCH
+    @@logger = Logger.new(STDOUT)
+    @@logger.level = Logger::DEBUG
+
+    def self.unsafe_search(query)
+      login = log_in
+      @@logger.debug('logged in as: ' + login.username)
+
+      rated_r = search(query, false)
+      @@logger.debug("rated R search for '#{query}', got #{rated_r.size} results")
+
+      rated_pg13 = search(query, true)
+      @@logger.debug("rated PG-13 search for '#{query}', got #{rated_pg13.size} results")
+
+#      rated_r_only = rated_r - rated_pg13
+#      @@logger.debug("removed rated PG-13 results from rated R results, got #{rated_r_only.size} results")
+
+#      rated_r_only
+    end
+
+    private
+    def self.log_in
+      FlickRaw.api_key = API_KEY
+      FlickRaw.shared_secret = API_SECRET
+      flickr.access_token = ACCESS_TOKEN
+      flickr.access_secret = ACCESS_SECRET
+      login = flickr.test.login
+      login
+    end
+
+    def self.search(query, safe)
+      safe_search = safe ? '2' : '3'
+      results = flickr.photos.search(text: query, safe_search: safe_search)
+      results
+
+#      urls = []
+#      results.each { |result|
+#        id = result['id']
+#        info = flickr.photos.getInfo(photo_id: id)
+#        url = FlickRaw.url_b(info)
+#        urls << url
+#      }
+#      urls
+
+    end
   end
 end
 
 
 if __FILE__ == $0
-  puts FLICKR.unsafe_search('nude')
+  puts FLICKR::SEARCH.unsafe_search('nude')
 end
