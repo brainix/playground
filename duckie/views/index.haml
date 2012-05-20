@@ -30,9 +30,9 @@
   %body
     %h1 Rubber Duckie
 
-    %form{action: "/search", method: "get"}
+    %form#search{method: "get", action: "/search"}
       %fieldset
-        %input{type: "text", name: "query", class: "text"}
+        %input{name: "query", type: "text"}
 
     #results
 

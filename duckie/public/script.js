@@ -18,3 +18,28 @@
  |           <http://www.gnu.org/licenses/>.                                 |
 \*---------------------------------------------------------------------------*/
 
+
+
+function Duckie() {
+  this._template = $('#result').remove().html();
+}
+
+Duckie.prototype.search = function() {
+  var query = $("input[name='query']").val();
+  $.get(
+    '/search',
+    {query: query},
+    function(data) {
+      alert(data[0]);
+    }
+  );
+  return false;
+}
+
+
+
+$(function() {
+  var duckie = new Duckie();
+  var search = $('#search');
+  search.submit(duckie.search);
+});
