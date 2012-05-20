@@ -27,6 +27,7 @@ function Duckie() {
 }
 
 Duckie.prototype.search = function() {
+  $('#results').empty();
   var query = $("[name='query']").val();
   $.get('/search', {query: query}, function(data) {
       $.each(data, function(indexInArray, valueOfElement) {
