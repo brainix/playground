@@ -74,17 +74,18 @@ module FLICKR
 
   module SEARCH
     EXAMPLE_RESULT_URLS = [
-      "http://farm3.staticflickr.com/2766/4187890892_fe3e0ff095_b.jpg",
-      "http://farm3.staticflickr.com/2793/4187888704_2c4c94e178_b.jpg",
-      "http://farm8.staticflickr.com/7064/6980474609_3e2ecf43d2_b.jpg",
-      "http://farm3.staticflickr.com/2346/2517520999_e32ff822e7_b.jpg",
-      "http://farm4.staticflickr.com/3258/2517522359_0ce711db19_b.jpg",
-      "http://farm3.staticflickr.com/2550/4187123953_a64532aa19_b.jpg",
-      "http://farm3.staticflickr.com/2674/4187121493_01e9cb05c9_b.jpg",
-      "http://farm7.staticflickr.com/6139/5968605076_227d76a577_b.jpg",
-      "http://farm7.staticflickr.com/6124/5968605738_628cc44333_b.jpg",
-      "http://farm8.staticflickr.com/7223/6881190676_fd40fb33e2_b.jpg",
-      "http://farm3.staticflickr.com/2306/2517522331_6e1043ff09_b.jpg",
+      'http://farm3.staticflickr.com/2766/4187890892_fe3e0ff095.jpg',
+      'http://farm3.staticflickr.com/2793/4187888704_2c4c94e178.jpg',
+      'http://farm8.staticflickr.com/7064/6980474609_3e2ecf43d2.jpg',
+      'http://farm3.staticflickr.com/2346/2517520999_e32ff822e7.jpg',
+      'http://farm4.staticflickr.com/3258/2517522359_0ce711db19.jpg',
+      'http://farm3.staticflickr.com/2550/4187123953_a64532aa19.jpg',
+      'http://farm3.staticflickr.com/2674/4187121493_01e9cb05c9.jpg',
+      'http://farm7.staticflickr.com/6139/5968605076_227d76a577.jpg',
+      'http://farm7.staticflickr.com/6124/5968605738_628cc44333.jpg',
+      'http://farm8.staticflickr.com/7223/6881190676_fd40fb33e2.jpg',
+      'http://farm3.staticflickr.com/2306/2517522331_6e1043ff09.jpg',
+      'http://farm7.staticflickr.com/6169/6258197004_ed7b5a1ba0.jpg',
     ]
 
     @@logger = Logger.new(STDOUT)
