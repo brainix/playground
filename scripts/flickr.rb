@@ -86,10 +86,11 @@ module FLICKR
       rated_pg13 = search(query, true)
       @@logger.debug("rated PG-13 search for '#{query}', got #{rated_pg13.size} results")
 
-#      rated_r_only = rated_r - rated_pg13
-#      @@logger.debug("removed rated PG-13 results from rated R results, got #{rated_r_only.size} results")
+      rated_r_only = rated_r - rated_pg13
+      @@logger.debug("removed rated PG-13 results from rated R results, got #{rated_r_only.size} results")
 
-#      rated_r_only
+      urls = ids_to_urls(rated_r_only)
+      urls
     end
 
     private
@@ -104,23 +105,30 @@ module FLICKR
 
     def self.search(query, safe)
       safe_search = safe ? '2' : '3'
-      results = flickr.photos.search(text: query, safe_search: safe_search)
-      results
+      results = flickr.photos.search(
+        text: query,
+        sort: 'relevance',
+        safe_search: safe_search
+      )
 
-#      urls = []
-#      results.each { |result|
-#        id = result['id']
-#        info = flickr.photos.getInfo(photo_id: id)
-#        url = FlickRaw.url_b(info)
-#        urls << url
-#      }
-#      urls
+      ids = []
+      results.each { |result| ids << result['id'] }
+      ids
+    end
 
+    def self.ids_to_urls(ids)
+      urls = []
+      ids.each { |id|
+        info = flickr.photos.getInfo(photo_id: id)
+        url = FlickRaw.url_b(info)
+        urls << url
+      }
+      urls
     end
   end
 end
 
 
 if __FILE__ == $0
-  puts FLICKR::SEARCH.unsafe_search('nude')
+  puts FLICKR::SEARCH.unsafe_search('skirt')
 end
