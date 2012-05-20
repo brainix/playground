@@ -20,16 +20,19 @@
 
 
 
+var template = null;
+
 function Duckie() {
-  this._template = $('#result').remove().html();
+  template = $('#result').remove().html();
 }
 
 Duckie.prototype.search = function() {
-  var query = $("input[name='query']").val();
+  var query = $("[name='query']").val();
   $.get(
     '/search',
     {query: query},
     function(data) {
+      alert(template);
       alert(data[0]);
     }
   );
