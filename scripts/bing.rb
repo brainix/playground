@@ -34,40 +34,48 @@ module Bing
 
   module Image
     URL = 'https://api.datamarket.azure.com/Bing/Search/Image'
+    NUM_RESULTS = 1000
 
     @@logger = Logger.new(STDOUT)
     @@logger.level = Logger::DEBUG
 
     def self.unsafe_search(query)
       @@logger.info('running unsafe search for: ' + query)
-
-      unfiltered_results = search(query, false)
+      unfiltered_results = iterate(query, false)
       @@logger.debug('got %s unfiltered results' % unfiltered_results.size)
-
-      filtered_results = search(query, true)
+      filtered_results = iterate(query, true)
       @@logger.debug('got %s filtered results' % filtered_results.size)
-
       unsafe_results = unfiltered_results - filtered_results
       @@logger.debug('got %s unsafe results' % unsafe_results.size)
-
       @@logger.info('ran unsafe search for: ' + query)
       unsafe_results
     end
 
-    def self.search(query, safe)
-      query = build_query(query, safe)
+    private
+    def self.iterate(query, safe)
+      results, count = [], 0
+      while count < NUM_RESULTS
+        results += search(query, safe, count)
+        break if results.size == count
+        count += results.size
+      end
+      results
+    end
+
+    def self.search(query, safe, offset)
+      query = build_query(query, safe, offset)
       url = URL + '?' + query
       xml = issue_request(url)
       results = parse_xml(xml)
       results
     end
 
-    private
-    def self.build_query(query, safe)
+    def self.build_query(query, safe, offset)
       uri = uri = Addressable::URI.new
       uri.query_values = {
         Query: "'" + query + "'",
         Adult: "'" + (safe ? 'Moderate' : 'Off') + "'",
+        '$skip' => offset,
       }
       uri.query
     end
