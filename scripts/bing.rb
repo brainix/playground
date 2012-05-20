@@ -71,7 +71,7 @@ module Bing
     end
 
     def self.build_query(query, safe, offset)
-      uri = uri = Addressable::URI.new
+      uri = Addressable::URI.new
       uri.query_values = {
         Query: "'" + query + "'",
         Adult: "'" + (safe ? 'Moderate' : 'Off') + "'",
