@@ -55,7 +55,7 @@ module FLICKR
 
     def self.verify(auth_url)
       puts 'Load: ' + auth_url
-      puts 'Authorize Rubber Duckie.'
+      puts 'Authorize Rubber Duckie'
       puts 'Copy/paste the authorization number here:'
       verifier = gets.strip
       verifier
@@ -78,16 +78,16 @@ module FLICKR
 
     def self.unsafe_search(query)
       login = log_in
-      @@logger.debug('logged in as: ' + login.username)
+      @@logger.debug('Logged in as: ' + login.username)
 
       rated_r = search(query, false)
-      @@logger.debug("rated R search for '#{query}', got #{rated_r.size} results")
+      @@logger.debug("Rated R search for '#{query}', got #{rated_r.size} results")
 
       rated_pg13 = search(query, true)
-      @@logger.debug("rated PG-13 search for '#{query}', got #{rated_pg13.size} results")
+      @@logger.debug("Rated PG-13 search for '#{query}', got #{rated_pg13.size} results")
 
       rated_r_only = rated_r - rated_pg13
-      @@logger.debug("removed rated PG-13 results from rated R results, got #{rated_r_only.size} results")
+      @@logger.debug("Removed Rated PG-13 results from Rated R results, got #{rated_r_only.size} results")
 
       urls = ids_to_urls(rated_r_only)
       urls
@@ -127,6 +127,7 @@ module FLICKR
     end
   end
 end
+
 
 
 if __FILE__ == $0
