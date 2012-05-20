@@ -74,18 +74,12 @@ module FLICKR
 
   module SEARCH
     EXAMPLE_RESULT_URLS = [
-      'http://farm3.staticflickr.com/2766/4187890892_fe3e0ff095.jpg',
-      'http://farm3.staticflickr.com/2793/4187888704_2c4c94e178.jpg',
-      'http://farm8.staticflickr.com/7064/6980474609_3e2ecf43d2.jpg',
-      'http://farm3.staticflickr.com/2346/2517520999_e32ff822e7.jpg',
-      'http://farm4.staticflickr.com/3258/2517522359_0ce711db19.jpg',
-      'http://farm3.staticflickr.com/2550/4187123953_a64532aa19.jpg',
-      'http://farm3.staticflickr.com/2674/4187121493_01e9cb05c9.jpg',
-      'http://farm7.staticflickr.com/6139/5968605076_227d76a577.jpg',
-      'http://farm7.staticflickr.com/6124/5968605738_628cc44333.jpg',
-      'http://farm8.staticflickr.com/7223/6881190676_fd40fb33e2.jpg',
-      'http://farm3.staticflickr.com/2306/2517522331_6e1043ff09.jpg',
-      'http://farm7.staticflickr.com/6169/6258197004_ed7b5a1ba0.jpg',
+      'http://farm6.staticflickr.com/5090/5332645426_0710ccc417.jpg',
+      'http://farm6.staticflickr.com/5204/5329570830_6c210b3248.jpg',
+      'http://farm6.staticflickr.com/5047/5332028503_b531c15a87.jpg',
+      'http://farm6.staticflickr.com/5163/5328956443_2dd0d2077b.jpg',
+      'http://farm6.staticflickr.com/5179/5463613017_34b5a1361b.jpg',
+      'http://farm6.staticflickr.com/5019/5463609111_5a39342c04.jpg',
     ]
 
     @@logger = Logger.new(STDOUT)
@@ -93,7 +87,7 @@ module FLICKR
 
     def self.unsafe_search(query, debug=false)
       if debug
-        @@logger.warn('Running in debug mode, return hard-coded example results')
+        @@logger.warn('Running in debug mode, returning hard-coded example results')
         urls = EXAMPLE_RESULT_URLS
       else
         login = log_in
