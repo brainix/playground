@@ -41,6 +41,6 @@ end
 get '/search' do
   content_type :json
   query = params['query']
-  results = FLICKR::SEARCH.unsafe_search(query)
+  results = FLICKR::SEARCH.unsafe_search(query, debug=false)
   results.to_json
 end

@@ -92,7 +92,7 @@ module FLICKR
 
     def self.unsafe_search(query, debug=false)
       if debug
-        @@logger.info('Running in debug mode, return hard-coded example results')
+        @@logger.warn('Running in debug mode, return hard-coded example results')
         urls = EXAMPLE_RESULT_URLS
       else
         login = log_in
@@ -135,7 +135,7 @@ module FLICKR
       urls = []
       ids.each { |id|
         info = flickr.photos.getInfo(photo_id: id)
-        url = FlickRaw.url_b(info)
+        url = FlickRaw.url(info)
         urls << url
       }
       urls
