@@ -20,7 +20,9 @@
 
 
 
+require 'rubygems'
 require 'sinatra'
+require 'haml'
 
 load 'flickr.rb'
 
