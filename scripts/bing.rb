@@ -34,6 +34,15 @@ module Bing
   module Image
     URL = 'https://api.datamarket.azure.com/Bing/Search/Image'
 
+    def self.unsafe_search(query)
+      unfiltered_results = search(query, false)
+      filtered_results = search(query, true)
+      intersection = unfiltered_results & filtered_results
+      unsafe_results = unfiltered_results - intersection
+      unsafe_results
+    end
+
+    private
     def self.search(query, safe)
       query = build_query(query, safe)
       url = URL + '?' + query
@@ -42,7 +51,6 @@ module Bing
       results
     end
 
-    private
     def self.build_query(query, safe)
       uri = uri = Addressable::URI.new
       uri.query_values = {
@@ -79,5 +87,5 @@ end
 
 
 if __FILE__ == $0
-  puts Bing::Image.search('nude', false)
+  puts Bing::Image.unsafe_search('nude')
 end
