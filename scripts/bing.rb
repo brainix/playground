@@ -22,6 +22,7 @@
 
 
 require 'addressable/uri'
+require 'logger'
 require 'net/http'
 require 'net/https'
 require 'rexml/document'
@@ -34,15 +35,25 @@ module Bing
   module Image
     URL = 'https://api.datamarket.azure.com/Bing/Search/Image'
 
+    @@logger = Logger.new(STDOUT)
+    @@logger.level = Logger::DEBUG
+
     def self.unsafe_search(query)
+      @@logger.info('running unsafe search for: ' + query)
+
       unfiltered_results = search(query, false)
+      @@logger.debug('got %s unfiltered results' % unfiltered_results.size)
+
       filtered_results = search(query, true)
-      intersection = unfiltered_results & filtered_results
-      unsafe_results = unfiltered_results - intersection
+      @@logger.debug('got %s filtered results' % filtered_results.size)
+
+      unsafe_results = unfiltered_results - filtered_results
+      @@logger.debug('got %s unsafe results' % unsafe_results.size)
+
+      @@logger.info('ran unsafe search for: ' + query)
       unsafe_results
     end
 
-    private
     def self.search(query, safe)
       query = build_query(query, safe)
       url = URL + '?' + query
@@ -51,6 +62,7 @@ module Bing
       results
     end
 
+    private
     def self.build_query(query, safe)
       uri = uri = Addressable::URI.new
       uri.query_values = {
