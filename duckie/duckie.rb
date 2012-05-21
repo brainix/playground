@@ -28,7 +28,7 @@ load 'flickr.rb'
 
 
 
-DEBUG = true
+DEBUG = false
 
 FLICKR::SEARCH.log_in(debug=DEBUG)
 

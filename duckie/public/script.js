@@ -22,11 +22,15 @@
 
 var template = null;
 
-function Duckie() {
+
+
+function init() {
   template = $('#result').remove().html();
 }
 
-Duckie.prototype.search = function() {
+
+
+function search() {
   $('#results').empty();
   var query = $("[name='query']").val();
   $.get('/search', {query: query}, function(data) {
@@ -43,7 +47,6 @@ Duckie.prototype.search = function() {
 
 
 $(function() {
-  var duckie = new Duckie();
-  var search = $('#search');
-  search.submit(duckie.search);
+  init();
+  $('#search').submit(search);
 });
