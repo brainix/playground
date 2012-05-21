@@ -131,7 +131,8 @@ module FLICKR
       results = flickr.photos.search(
         text: query,
         sort: 'relevance',
-        safe_search: safe_search
+        safe_search: safe_search,
+        per_page: '500',
       )
 
       ids = []
