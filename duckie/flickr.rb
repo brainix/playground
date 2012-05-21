@@ -74,24 +74,46 @@ module FLICKR
 
   module SEARCH
     EXAMPLE_RESULT_URLS = [
-      'http://farm6.staticflickr.com/5090/5332645426_0710ccc417.jpg',
-      'http://farm6.staticflickr.com/5204/5329570830_6c210b3248.jpg',
-      'http://farm6.staticflickr.com/5047/5332028503_b531c15a87.jpg',
-      'http://farm6.staticflickr.com/5163/5328956443_2dd0d2077b.jpg',
-      'http://farm6.staticflickr.com/5179/5463613017_34b5a1361b.jpg',
-      'http://farm6.staticflickr.com/5019/5463609111_5a39342c04.jpg',
+      'http://farm7.staticflickr.com/6159/6176523790_5e29bbc181.jpg',
+      'http://farm7.staticflickr.com/6160/6176524142_278ee0c7bc.jpg',
+      'http://farm7.staticflickr.com/6165/6176524192_4bbd6895b6.jpg',
+      'http://farm7.staticflickr.com/6170/6176523674_0280cf96b5.jpg',
+      'http://farm7.staticflickr.com/6155/6175995205_076a436445.jpg',
+      'http://farm7.staticflickr.com/6176/6175994873_136a7bb549.jpg',
+      'http://farm7.staticflickr.com/6153/6175994745_a584fbac13.jpg',
+      'http://farm7.staticflickr.com/6177/6175994995_b5848355fc.jpg',
+      'http://farm7.staticflickr.com/6172/6175995343_1272b88a14.jpg',
+      'http://farm7.staticflickr.com/6175/6176524062_9d83904b2d.jpg',
+      'http://farm7.staticflickr.com/6160/6175994947_ff7c613e84.jpg',
+      'http://farm7.staticflickr.com/6172/6175995843_70b22082c4.jpg',
+      'http://farm7.staticflickr.com/6180/6175995711_58cc9425c2.jpg',
+      'http://farm7.staticflickr.com/6161/6176524704_7f7c7fe9a9.jpg',
+      'http://farm7.staticflickr.com/6176/6175995639_c950dab663.jpg',
     ]
 
     @@logger = Logger.new(STDOUT)
     @@logger.level = Logger::DEBUG
 
+    def self.log_in(debug=false)
+      if debug
+        login = nil
+        @@logger.warn('Running in debug mode, not logging in')
+      else
+        FlickRaw.api_key = API_KEY
+        FlickRaw.shared_secret = API_SECRET
+        flickr.access_token = ACCESS_TOKEN
+        flickr.access_secret = ACCESS_SECRET
+        login = flickr.test.login
+        @@logger.info('Logged in as: ' + login.username)
+      end
+      login
+    end
+
     def self.unsafe_search(query, debug=false)
       if debug
-        @@logger.warn('Running in debug mode, returning hard-coded example results')
         urls = EXAMPLE_RESULT_URLS
+        @@logger.warn('Running in debug mode, returning hard-coded example results')
       else
-        login = log_in
-        @@logger.info('Logged in as: ' + login.username)
         rated_r = search(query, false)
         @@logger.debug("Rated R search for '#{query}', got #{rated_r.size} results")
         rated_pg13 = search(query, true)
@@ -104,15 +126,6 @@ module FLICKR
     end
 
     private
-    def self.log_in
-      FlickRaw.api_key = API_KEY
-      FlickRaw.shared_secret = API_SECRET
-      flickr.access_token = ACCESS_TOKEN
-      flickr.access_secret = ACCESS_SECRET
-      login = flickr.test.login
-      login
-    end
-
     def self.search(query, safe)
       safe_search = safe ? '2' : '3'
       results = flickr.photos.search(
