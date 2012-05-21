@@ -91,6 +91,8 @@ module FLICKR
       'http://farm7.staticflickr.com/6176/6175995639_c950dab663.jpg',
     ]
 
+    MAX_RESULTS = 32
+
     @@logger = Logger.new(STDOUT)
     @@logger.level = Logger::DEBUG
 
@@ -120,6 +122,10 @@ module FLICKR
         @@logger.debug("Rated PG-13 search for '#{query}', got #{rated_pg13.size} results")
         rated_r_only = rated_r - rated_pg13
         @@logger.info("Removed Rated PG-13 results from Rated R results, got #{rated_r_only.size} results")
+        if rated_r_only.size > MAX_RESULTS
+          rated_r_only = rated_r_only[0 .. MAX_RESULTS - 1]
+          @@logger.debug("Capped to first #{MAX_RESULTS} Rated R results")
+        end
         urls = ids_to_urls(rated_r_only)
       end
       urls

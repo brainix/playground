@@ -29,9 +29,7 @@ load 'flickr.rb'
 
 
 DEBUG = false
-
 FLICKR::SEARCH.log_in(debug=DEBUG)
-
 set :haml, :format => :html5
 
 
