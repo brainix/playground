@@ -91,7 +91,7 @@ module FLICKR
       'http://farm7.staticflickr.com/6176/6175995639_c950dab663.jpg',
     ]
 
-    MAX_RESULTS = 32
+    MAX_RESULTS = 16
 
     @@logger = Logger.new(STDOUT)
     @@logger.level = Logger::DEBUG
