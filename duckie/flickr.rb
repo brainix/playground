@@ -91,7 +91,7 @@ module FLICKR
       'http://farm7.staticflickr.com/6176/6175995639_c950dab663.jpg',
     ]
 
-    MAX_RESULTS = 16
+    MAX_RESULTS = 500
 
     @@logger = Logger.new(STDOUT)
     @@logger.level = Logger::DEBUG
@@ -114,18 +114,18 @@ module FLICKR
     def self.unsafe_search(query, debug=false)
       if debug
         urls = EXAMPLE_RESULT_URLS
-        @@logger.warn('Running in debug mode, returning hard-coded example results')
+        @@logger.warn('Running in debug mode, returning hard-coded example photos')
       else
-        rated_r = search(query, false)
-        @@logger.debug("Rated R search for '#{query}', got #{rated_r.size} results")
-        rated_pg13 = search(query, true)
-        @@logger.debug("Rated PG-13 search for '#{query}', got #{rated_pg13.size} results")
-        rated_r_only = rated_r - rated_pg13
-        @@logger.info("Removed Rated PG-13 results from Rated R results, got #{rated_r_only.size} results")
-        if rated_r_only.size > MAX_RESULTS
-          rated_r_only = rated_r_only[0 .. MAX_RESULTS - 1]
-          @@logger.debug("Capped to first #{MAX_RESULTS} Rated R results")
+        threads, rated_r, rated_pg13 = [], [], []
+        time('getting Rated R and PG-13 photos') do
+          threads << Thread.new { rated_r = search(query, false) }
+          threads << Thread.new { rated_pg13 = search(query, true) }
+          threads.each { |thread| thread.join }
         end
+        rated_r_only = rated_r - rated_pg13
+        @@logger.info("Removed Rated PG-13 from Rated R photos, got #{rated_r_only.size} Rated R only photos")
+        @@logger.debug("Capping to first #{MAX_RESULTS} Rated R only photos") if rated_r_only.size > MAX_RESULTS
+        rated_r_only = rated_r_only[0 .. MAX_RESULTS - 1]
         urls = ids_to_urls(rated_r_only)
       end
       urls
@@ -147,13 +147,28 @@ module FLICKR
     end
 
     def self.ids_to_urls(ids)
-      urls = []
-      ids.each { |id|
-        info = flickr.photos.getInfo(photo_id: id)
-        url = FlickRaw.url(info)
-        urls << url
-      }
+      threads, urls = [], []
+      time('converting photo IDs to URLs') do
+        (0 .. ids.size - 1).each { |index|
+          threads << Thread.new {
+            info = flickr.photos.getInfo(photo_id: ids[index])
+            url = FlickRaw.url(info)
+            Thread.current[:output] = url
+          }
+        }
+        threads.each { |thread|
+          thread.join
+          urls << thread[:output]
+        }
+      end
       urls
+    end
+
+    def self.time(event)
+      start = Time.now
+      yield
+      interval = Time.now - start
+      @@logger.debug("Timed #{event}, took #{interval} seconds")
     end
   end
 end
@@ -162,6 +177,7 @@ end
 
 if __FILE__ == $0
   query = ARGV.join(' ')
-  results = puts FLICKR::SEARCH.unsafe_search(query)
-  results urls
+  FLICKR::SEARCH.log_in
+  photos = puts FLICKR::SEARCH.unsafe_search(query)
+  photos
 end
