@@ -54,15 +54,17 @@ module FLICKR
     end
 
     def self.verify(auth_url)
-      puts 'Load: ' + auth_url
-      puts 'Authorize Rubber Duckie'
-      puts 'Copy/paste the authorization number here:'
+      puts '1. Load: ' + auth_url
+      puts '2. Authorize Rubber Duckie'
+      puts '3. Copy/paste the authorization number here:'
       verifier = gets.strip
       verifier
     end
 
     def self.log_in(token, verifier)
-      flickr.get_access_token(token['oauth_token'], token['oauth_token_secret'], verifier)
+      oauth_token = token['oauth_token']
+      oauth_token_secret = token['oauth_token_secret']
+      flickr.get_access_token(oauth_token, oauth_token_secret, verifier)
       login = flickr.test.login
       puts 'Username: ' + login.username
       puts 'Access token: ' + flickr.access_token
@@ -112,6 +114,7 @@ module FLICKR
     end
 
     def self.unsafe_search(query, debug=false)
+      @@logger.info("Unsafe searching for: #{query}")
       if debug
         urls = EXAMPLE_RESULT_URLS
         @@logger.warn('Running in debug mode, returning hard-coded example photos')
