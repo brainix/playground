@@ -19,21 +19,28 @@
 \*---------------------------------------------------------------------------*/
 
 
-
 var template = null;
+var jqXHR = null;
 
 
-
-function init() {
+$(function() {
   template = $('#result').remove().html();
-}
-
+  $('#search').submit(search);
+  $("[name='query']").focus();
+});
 
 
 function search() {
+  if (jqXHR !== null) {
+    jqXHR.abort();
+    console.log('aborted previous query');
+  }
   $('#results').empty();
   var query = $("[name='query']").val();
-  $.get('/search', {query: query}, function(data) {
+  $("[name='query']").val('');
+
+  jqXHR = $.getJSON('/search', {query: query}, function(data) {
+      jqXHR = null;
       $.each(data, function(indexInArray, valueOfElement) {
         var img = $(template);
         img.attr('src', valueOfElement);
@@ -43,10 +50,3 @@ function search() {
   );
   return false;
 }
-
-
-
-$(function() {
-  init();
-  $('#search').submit(search);
-});
