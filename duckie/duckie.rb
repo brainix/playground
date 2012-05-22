@@ -19,7 +19,6 @@
 #-----------------------------------------------------------------------------#
 
 
-
 require 'rubygems'
 require 'sinatra'
 require 'haml'
@@ -27,17 +26,14 @@ require 'haml'
 load 'flickr.rb'
 
 
-
 DEBUG = false
 FLICKR::SEARCH.log_in(debug=DEBUG)
 set :haml, :format => :html5
 
 
-
 get '/' do
   haml :index
 end
-
 
 
 get '/search' do
