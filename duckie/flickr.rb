@@ -93,10 +93,10 @@ module FLICKR
       'http://farm7.staticflickr.com/6176/6175995639_c950dab663.jpg',
     ]
 
-    MAX_RESULTS = 500
+    MAX_RESULTS = 50
 
     @@logger = Logger.new(STDOUT)
-    @@logger.level = Logger::DEBUG
+    @@logger.level = Logger::INFO
 
     def self.log_in(debug=false)
       if debug
@@ -119,14 +119,14 @@ module FLICKR
         urls = EXAMPLE_RESULT_URLS
         @@logger.warn('Running in debug mode, returning hard-coded example photos')
       else
-        threads, rated_r, rated_pg13 = [], [], []
-        time('getting Rated R and PG-13 photos') do
+        threads, rated_r, rated_g = [], [], []
+        time('getting Rated R and Rated G photos') do
           threads << Thread.new { rated_r = search(query, false) }
-          threads << Thread.new { rated_pg13 = search(query, true) }
+          threads << Thread.new { rated_g = search(query, true) }
           threads.each { |thread| thread.join }
         end
-        rated_r_only = rated_r - rated_pg13
-        @@logger.info("Removed Rated PG-13 from Rated R photos, got #{rated_r_only.size} Rated R only photos")
+        rated_r_only = rated_r - rated_g
+        @@logger.info("Removed Rated G from Rated R photos, got #{rated_r_only.size} Rated R only photos")
         @@logger.debug("Capping to first #{MAX_RESULTS} Rated R only photos") if rated_r_only.size > MAX_RESULTS
         rated_r_only = rated_r_only[0 .. MAX_RESULTS - 1]
         urls = ids_to_urls(rated_r_only)
@@ -136,7 +136,7 @@ module FLICKR
 
     private
     def self.search(query, safe)
-      safe_search = safe ? '2' : '3'
+      safe_search = safe ? '1' : '3'
       results = flickr.photos.search(
         text: query,
         sort: 'relevance',
