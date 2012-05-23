@@ -45,10 +45,9 @@ function search() {
   jqXHR = $.getJSON('/search', {query: query}, function(data) {
       jqXHR = null;
       $.each(data, function(indexInArray, valueOfElement) {
-        var img = $(template);
-        img.attr('src', valueOfElement);
-        img.appendTo('#results');
-        $(img).show();
+        var result = $(template);
+        result.find('img.photo').attr('src', valueOfElement);
+        result.appendTo('#results');
       });
     }
   );
