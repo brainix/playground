@@ -35,14 +35,15 @@ function search() {
     jqXHR.abort();
     console.log('aborted previous query');
   }
-  $('#results').empty();
+
   var query = $("[name='query']").val().toLowerCase();
+  document.title = 'rubber duckie: ' + query;
+  $('h2').html(query);
   $("[name='query']").val('');
+  $('#results').empty();
 
   jqXHR = $.getJSON('/search', {query: query}, function(data) {
       jqXHR = null;
-      document.title = 'rubber duckie: ' + query;
-      $('h2').html(query);
       $.each(data, function(indexInArray, valueOfElement) {
         var img = $(template);
         img.attr('src', valueOfElement);

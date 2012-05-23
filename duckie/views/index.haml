@@ -30,7 +30,9 @@
 
   %body
     %hgroup
-      %h1 Rubber Duckie
+      %h1
+        %a{href: "/"}
+          Rubber Duckie
       %h2 Unsafe Photo Search
 
     %article
@@ -38,8 +40,8 @@
         %fieldset
           %input{name: "query", type: "text"}
 
+    %article
       #results
-
       #result
         %img{class: "result", src: "https://en.gravatar.com/brainix", alt: "result", style: "display: none"}
 
