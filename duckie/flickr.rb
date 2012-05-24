@@ -93,6 +93,12 @@ module FLICKR
       'http://farm7.staticflickr.com/6176/6175995639_c950dab663.jpg',
     ]
 
+    MPAA_TO_FLICKR_RATING = {
+      rated_pg: '1',
+      rated_pg13: '2',
+      rated_r: '3',
+    }
+
     MAX_RESULTS = 50
 
     @@logger = Logger.new(STDOUT)
@@ -119,28 +125,31 @@ module FLICKR
         urls = EXAMPLE_RESULT_URLS
         @@logger.warn('Running in debug mode, returning hard-coded example photos')
       else
-        threads, rated_r, rated_g = [], [], []
-        time('getting Rated R and Rated G photos') do
-          threads << Thread.new { rated_r = search(query, false) }
-          threads << Thread.new { rated_g = search(query, true) }
+        threads, rated_r, rated_pg13, rated_pg = [], [], [], []
+        time('getting Rated R, Rated PG-13, and Rated PG photos') do
+          threads << Thread.new { rated_r = search(query, :rated_r) }
+          threads << Thread.new { rated_pg13 = search(query, :rated_pg13) }
+          threads << Thread.new { rated_pg = search(query, :rated_pg) }
           threads.each { |thread| thread.join }
         end
-        rated_r_only = rated_r - rated_g
-        @@logger.info("Removed Rated G from Rated R photos, got #{rated_r_only.size} Rated R only photos")
-        @@logger.debug("Capping to first #{MAX_RESULTS} Rated R only photos") if rated_r_only.size > MAX_RESULTS
-        rated_r_only = rated_r_only[0 .. MAX_RESULTS - 1]
-        urls = ids_to_urls(rated_r_only)
+        rated_r_only = rated_r - rated_pg13
+        rated_pg13_only = rated_pg13 - rated_pg
+        results = rated_r_only + rated_pg13_only
+        @@logger.info("Removed Rated PG-13 from Rated R photos, got #{rated_r_only.size} Rated R only photos")
+        @@logger.info("Removed Rated PG from Rated PG-13 photos, got #{rated_pg13_only.size} Rated PG-13 only photos")
+        @@logger.debug("Capping to first #{MAX_RESULTS} Rated R only photos") if results.size > MAX_RESULTS
+        results = results[0 .. MAX_RESULTS - 1]
+        urls = ids_to_urls(results)
       end
       urls
     end
 
     private
-    def self.search(query, safe)
-      safe_search = safe ? '1' : '3'
+    def self.search(query, mpaa_rating)
       results = flickr.photos.search(
         text: query,
         sort: 'relevance',
-        safe_search: safe_search,
+        safe_search: MPAA_TO_FLICKR_RATING[mpaa_rating],
         per_page: '500',
       )
 
