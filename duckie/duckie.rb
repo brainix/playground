@@ -26,8 +26,7 @@ require 'haml'
 load 'flickr.rb'
 
 
-DEBUG = false
-FLICKR::SEARCH.log_in(debug=DEBUG)
+FLICKR::SEARCH.log_in
 set :haml, :format => :html5
 
 
@@ -39,6 +38,6 @@ end
 get '/search' do
   content_type :json
   query = params['query']
-  results = FLICKR::SEARCH.unsafe_search(query, debug=DEBUG)
+  results = FLICKR::SEARCH.unsafe_search(query)
   results.to_json
 end
