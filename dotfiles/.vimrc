@@ -49,7 +49,7 @@ set autoread
 
 " Enable file type detection, load the plugins for specific file types, and
 " load the indent files for specific file types.
-filetype on
+" filetype on
 " filetype plugin on
 " filetype indent on
 
@@ -58,22 +58,12 @@ filetype on
 " Configure sane tab behavior...
 set expandtab
 
-" set shiftwidth=4
-" set softtabstop=4
-" set tabstop=4
-
 set shiftwidth=2
 set softtabstop=2
 set tabstop=2
 
 set smarttab
 set autoindent
-
-" ...except when editing Ruby files.  ;-)  When editing Ruby files, use two
-" spaces for tabs.
-" autocmd FileType ruby setlocal shiftwidth=2
-" autocmd FileType ruby setlocal softtabstop=2
-" autocmd FileType ruby setlocal tabstop=2
 
 
 
@@ -90,7 +80,7 @@ set backspace=indent,eol,start
 
 " We're on a fast terminal connection, so send more characters for smoother
 " redrawing.
-set ttyfast
+" set ttyfast
 
 set background=dark
 set ruler
