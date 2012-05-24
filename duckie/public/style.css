@@ -93,7 +93,7 @@ input {
   height: 200px;
 }
 
-.photo {
+img.photo {
   max-width: 190px;
   max-height: 190px;
 }
