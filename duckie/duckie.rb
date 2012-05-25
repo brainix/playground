@@ -26,8 +26,8 @@ require 'haml'
 load 'flickr.rb'
 
 
-FLICKR::SEARCH.log_in
 set :haml, :format => :html5
+FLICKR::SEARCH.log_in
 
 
 get '/' do
