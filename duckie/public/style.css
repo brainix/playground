@@ -87,13 +87,28 @@ input {
   width: 480px;
 }
 
-.frame {
+.frame-outer {
   display: inline-block;
-  width: 200px;
-  height: 200px;
+  width: 150px;
+  height: 150px;
+}
+
+.frame-inner {
+  display: inline-block;
+  vertical-align: middle;
+  width: 100%;
+  height: auto;
 }
 
 img.photo {
-  max-width: 190px;
-  max-height: 190px;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  max-width: 140px;
+  max-height: 140px;
+  opacity: 0.75;
+}
+
+img.photo:hover {
+  opacity: 1.0;
 }
