@@ -32,30 +32,33 @@ require 'URI'
 module Bing
   ACCOUNT_KEY = 'vwg49S0132p4mwVBpBL4p4GXTAhQyXU9PJoLnzpsXnE='
   URL = 'https://api.datamarket.azure.com/Bing/Search/Image'
-  NUM_RESULTS = 1000
 
   @@logger = Logger.new(STDOUT)
   @@logger.level = Logger::INFO
 
   def self.unsafe_search(query)
-    rated_r = iterate(query, false)
-    rated_pg13 = iterate(query, true)
+    threads, rated_r, rated_pg13 = [], [], []
+    [false, true].each do |safe|
+      [0, 50, 100].each do |offset|
+        threads << Thread.new do
+          Thread.current[:safe] = safe
+          Thread.current[:photos] = search(query, safe, offset)
+        end
+      end
+    end
+
+    threads.each do |thread|
+      thread.join
+      rated_r += thread[:photos] unless thread[:safe]
+      rated_pg13 += thread[:photos] if thread[:safe]
+    end
+
     rated_r_only = rated_r.reject { |photo| rated_pg13.include? photo }
-    @@logger.info("#{query}: got #{rated_r_only.size} Rated R only photos, #{rated_r.size} Rated R photos, and #{rated_pg13.size} Rated PG-13 photos")
+    @@logger.info("#{query}: got #{rated_r_only.size} Rated R photos")
     rated_r_only
   end
 
   private
-  def self.iterate(query, safe)
-    results, count = [], 0
-    while count < NUM_RESULTS
-      results += search(query, safe, count)
-      break if results.size == count
-      count += results.size
-    end
-    results
-  end
-
   def self.search(query, safe, offset)
     query = build_query(query, safe, offset)
     url = URL + '?' + query
