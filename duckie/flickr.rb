@@ -28,7 +28,7 @@ require 'flickraw'
 
 
 
-module FLICKR
+module Flickr
   API_KEY = '48410dec9118d5fcddb9ce4be1d5e387'
   API_SECRET = '0f1be97a8ec091f6'
 
@@ -37,7 +37,7 @@ module FLICKR
 
 
 
-  module AUTHORIZATION
+  module Authorization
     def self.authorize
       token, auth_url = get_auth_url
       verifier = verify(auth_url)
@@ -74,7 +74,7 @@ module FLICKR
 
 
 
-  module SEARCH
+  module Search
     MPAA_TO_FLICKR_RATING = {
       rated_pg: '1',
       rated_pg13: '2',
@@ -147,7 +147,7 @@ end
 
 if __FILE__ == $0
   query = ARGV.join(' ')
-  FLICKR::SEARCH.log_in
-  photos = puts FLICKR::SEARCH.unsafe_search(query)
+  Flickr::Search.log_in
+  photos = puts Flickr::Search.unsafe_search(query)
   photos
 end

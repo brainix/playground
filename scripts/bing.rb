@@ -31,82 +31,74 @@ require 'URI'
 
 module Bing
   ACCOUNT_KEY = 'vwg49S0132p4mwVBpBL4p4GXTAhQyXU9PJoLnzpsXnE='
+  URL = 'https://api.datamarket.azure.com/Bing/Search/Image'
+  NUM_RESULTS = 1000
 
-  module Image
-    URL = 'https://api.datamarket.azure.com/Bing/Search/Image'
-    NUM_RESULTS = 1000
+  @@logger = Logger.new(STDOUT)
+  @@logger.level = Logger::INFO
 
-    @@logger = Logger.new(STDOUT)
-    @@logger.level = Logger::DEBUG
+  def self.unsafe_search(query)
+    rated_r = iterate(query, false)
+    rated_pg13 = iterate(query, true)
+    rated_r_only = rated_r.reject { |photo| rated_pg13.include? photo }
+    @@logger.info("#{query}: got #{rated_r_only.size} Rated R only photos, #{rated_r.size} Rated R photos, and #{rated_pg13.size} Rated PG-13 photos")
+    rated_r_only
+  end
 
-    def self.unsafe_search(query)
-      @@logger.info('running unsafe search for: ' + query)
-      unfiltered_results = iterate(query, false)
-      @@logger.debug('got %s unfiltered results' % unfiltered_results.size)
-      filtered_results = iterate(query, true)
-      @@logger.debug('got %s filtered results' % filtered_results.size)
-      unsafe_results = unfiltered_results - filtered_results
-      @@logger.debug('got %s unsafe results' % unsafe_results.size)
-      @@logger.info('ran unsafe search for: ' + query)
-      unsafe_results
+  private
+  def self.iterate(query, safe)
+    results, count = [], 0
+    while count < NUM_RESULTS
+      results += search(query, safe, count)
+      break if results.size == count
+      count += results.size
     end
+    results
+  end
 
-    private
-    def self.iterate(query, safe)
-      results, count = [], 0
-      while count < NUM_RESULTS
-        results += search(query, safe, count)
-        break if results.size == count
-        count += results.size
-      end
-      results
-    end
+  def self.search(query, safe, offset)
+    query = build_query(query, safe, offset)
+    url = URL + '?' + query
+    xml = issue_request(url)
+    results = parse_xml(xml)
+    results
+  end
 
-    def self.search(query, safe, offset)
-      query = build_query(query, safe, offset)
-      url = URL + '?' + query
-      xml = issue_request(url)
-      results = parse_xml(xml)
-      results
-    end
+  def self.build_query(query, safe, offset)
+    uri = Addressable::URI.new
+    uri.query_values = {
+      Query: "'" + query + "'",
+      Adult: "'" + (safe ? 'Moderate' : 'Off') + "'",
+      '$skip' => offset,
+    }
+    uri.query
+  end
 
-    def self.build_query(query, safe, offset)
-      uri = Addressable::URI.new
-      uri.query_values = {
-        Query: "'" + query + "'",
-        Adult: "'" + (safe ? 'Moderate' : 'Off') + "'",
-        '$skip' => offset,
-      }
-      uri.query
-    end
+  def self.issue_request(url)
+    uri = URI(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    http.use_ssl = uri.scheme == 'https'
+    query = uri.query.nil? ? '' : ('?' + uri.query)
+    request = Net::HTTP::Get.new(uri.path + query)
+    request.basic_auth('', ACCOUNT_KEY)
+    response = http.request(request)
+    response.body
+  end
 
-    def self.issue_request(url)
-      uri = URI(url)
-      http = Net::HTTP.new(uri.host, uri.port)
-      http.use_ssl = uri.scheme == 'https'
-      query = uri.query.nil? ? '' : ('?' + uri.query)
-      request = Net::HTTP::Get.new(uri.path + query)
-      request.basic_auth('', ACCOUNT_KEY)
-      response = http.request(request)
-      response.body
+  def self.parse_xml(xml)
+    doc = REXML::Document.new(xml)
+    results = []
+    doc.elements.each('feed/entry/content/m:properties') do |element|
+      result = (element.elements.each('d:MediaUrl') {})[0].get_text
+      results << result
     end
-
-    def self.parse_xml(xml)
-      doc = REXML::Document.new(xml)
-      results = []
-      doc.elements.each('feed/entry/content/m:properties') {|element|
-        result = {
-          thumbnail: (element.elements.each('d:Thumbnail/d:MediaUrl') {})[0].get_text,
-          image: (element.elements.each('d:MediaUrl') {})[0].get_text,
-        }
-        results << result
-      }
-      results
-    end
+    results
   end
 end
 
 
 if __FILE__ == $0
-  puts Bing::Image.unsafe_search('nude')
+  query = ARGV.join(' ')
+  photos = Bing.unsafe_search(query)
+  puts photos
 end
