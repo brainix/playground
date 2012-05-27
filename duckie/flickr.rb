@@ -120,9 +120,7 @@ module Flickr
         safe_search: MPAA_TO_FLICKR_RATING[mpaa_rating],
         per_page: '500',
       )
-
-      ids = []
-      results.each { |result| ids << result['id'] }
+      ids = results.map { |result| result['id'] }
       ids
     end
 
