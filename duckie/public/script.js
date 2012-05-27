@@ -46,9 +46,9 @@ function search() {
       jqXHR = null;
       $.each(data, function(indexInArray, valueOfElement) {
         var result = $(template);
-        result.find('a.photo').attr('href', valueOfElement);
+        result.find('a.photo').attr('href', valueOfElement.full_size);
         result.find('a.photo').facebox();
-        result.find('a.photo img.photo').attr('src', valueOfElement);
+        result.find('a.photo img.photo').attr('src', valueOfElement.thumbnail);
         result.appendTo('#results');
       });
     }

@@ -39,7 +39,8 @@ module Bing
   def self.unsafe_search(query)
     threads, rated_r, rated_pg13 = [], [], []
     [false, true].each do |safe|
-      [0, 50, 100].each do |offset|
+      20.times do |offset|
+        offset *= 50
         threads << Thread.new do
           Thread.current[:safe] = safe
           Thread.current[:photos] = search(query, safe, offset)
@@ -92,7 +93,10 @@ module Bing
     doc = REXML::Document.new(xml)
     results = []
     doc.elements.each('feed/entry/content/m:properties') do |element|
-      result = (element.elements.each('d:MediaUrl') {})[0].get_text
+      result = {
+        thumbnail: (element.elements.each('d:Thumbnail/d:MediaUrl') {})[0].get_text,
+        full_size: (element.elements.each('d:MediaUrl') {})[0].get_text,
+      }
       results << result
     end
     results

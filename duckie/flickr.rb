@@ -107,8 +107,9 @@ module Flickr
       results = rated_r_only + rated_pg13_only
       @@logger.info("#{query}: got #{rated_r_only.size} Rated R and #{rated_pg13_only.size} Rated PG-13 photos")
       results = results[0 .. MAX_RESULTS - 1]
-      urls = ids_to_urls(results)
-      urls
+      results = ids_to_urls(results)
+      results.map! { |result| { thumbnail: result, full_size: result } }
+      results
     end
 
     private
