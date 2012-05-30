@@ -86,3 +86,8 @@ set background=dark
 set ruler
 syntax on
 set nowrap
+
+
+
+" Disable annoying beeps and flashes.
+set noerrorbells visualbell t_vb=
