@@ -19,7 +19,6 @@
 -#----------------------------------------------------------------------------#
 
 
-
 !!!
 
 %html{lang: "en"}
@@ -34,7 +33,7 @@
       %h1
         %a{href: "/"}
           Rubber Duckie
-      %h2 Unsafe Photo Search
+      %h2.query Naughty Photo Search
 
     %article
       %form#search{method: "get", action: "/search", autocomplete: "off"}
@@ -42,14 +41,14 @@
           %input{name: "query", type: "text"}
 
     %article
-      %h3.no-results
-        Couldn&rsquo;t find any unsafe photos
       #results
       #result
         .frame-outer
           .frame-inner
             %a{class: "photo", rel: "facebox", href: "http://1.gravatar.com/avatar/1fd20d1487b58d9071eb860447c65e24?size=420"}
               %img{class: "photo", src: "http://1.gravatar.com/avatar/1fd20d1487b58d9071eb860447c65e24?size=420", alt: "result"}
+      %h3.no-results
+        No naughty photos related to &ldquo;<span class="query"></span>&rdquo;
 
     %footer
       %p

@@ -38,7 +38,7 @@ function search() {
 
   var query = $("[name='query']").val().toLowerCase();
   document.title = 'rubber duckie: ' + query;
-  $('h2').html(query);
+  $('.query').html(query);
   $("[name='query']").val('');
   $('#results').empty();
   $('.no-results').hide();
