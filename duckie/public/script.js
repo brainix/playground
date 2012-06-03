@@ -41,6 +41,7 @@ function search() {
   $('h2').html(query);
   $("[name='query']").val('');
   $('#results').empty();
+  $('.no-results').hide();
 
   jqXHR = $.getJSON('/search', {query: query}, function(data) {
       jqXHR = null;
@@ -51,6 +52,9 @@ function search() {
         result.find('a.photo img.photo').attr('src', valueOfElement.thumbnail);
         result.appendTo('#results');
       });
+      if (data.length == 0) {
+        $('.no-results').show();
+      }
     }
   );
   return false;
