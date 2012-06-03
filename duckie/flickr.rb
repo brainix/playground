@@ -75,7 +75,7 @@ module Flickr
 
 
   module Search
-    MPAA_TO_FLICKR_RATING = {
+    MPAA_RATING_TO_FLICKR_SAFE_SEARCH_VALUE = {
       rated_pg: '1',
       rated_pg13: '2',
       rated_r: '3',
@@ -117,7 +117,7 @@ module Flickr
       results = flickr.photos.search(
         text: query,
         sort: 'relevance',
-        safe_search: MPAA_TO_FLICKR_RATING[mpaa_rating],
+        safe_search: MPAA_RATING_TO_FLICKR_SAFE_SEARCH_VALUE[mpaa_rating],
         per_page: '500',
       )
       ids = results.map { |result| result['id'] }
