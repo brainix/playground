@@ -86,8 +86,25 @@ input {
   width: 480px;
 }
 
-.no-results {
+.loading {
   display: none;
+  height: 200px;
+  width: 200px;
+  text-indent: 250px;
+  -webkit-mask-image: url(/spinner.png);
+  background-color: #000;
+  -webkit-animation: spinnerRotate;
+  -webkit-animation-duration: 2s;
+  -webkit-animation-iteration-count: infinite;
+  -webkit-animation-timing-function: linear;
+}
+
+@-webkit-keyframes spinnerRotate {
+  from {
+    -webkit-transform:rotate(0deg);
+  } to {
+    -webkit-transform:rotate(360deg);
+  }
 }
 
 .frame-outer {
@@ -116,4 +133,8 @@ img.photo {
 
 img.photo:hover {
   opacity: 1.0;
+}
+
+.no-results {
+  display: none;
 }

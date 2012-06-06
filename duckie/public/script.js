@@ -40,11 +40,13 @@ function search() {
   document.title = 'rubber duckie: ' + query;
   $('.query').html(query);
   $("[name='query']").val('');
+  $('.loading').show();
   $('#results').empty();
   $('.no-results').hide();
 
   jqXHR = $.getJSON('/search', {query: query}, function(data) {
       jqXHR = null;
+      $('.loading').hide();
       $.each(data, function(indexInArray, valueOfElement) {
         var result = $(template);
         result.find('a.photo').attr('href', valueOfElement.full_size);
