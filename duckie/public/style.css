@@ -92,9 +92,9 @@ input {
   width: 200px;
   text-indent: 250px;
   -webkit-mask-image: url(/spinner.png);
-  background-color: #000;
+  background-color: #516064;
   -webkit-animation: spinnerRotate;
-  -webkit-animation-duration: 2s;
+  -webkit-animation-duration: 3s;
   -webkit-animation-iteration-count: infinite;
   -webkit-animation-timing-function: linear;
 }
