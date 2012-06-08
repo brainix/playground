@@ -85,7 +85,7 @@
     settings: {
       opacity      : 0.2,
       overlay      : true,
-      loadingImage : '/throbber.gif',
+      loadingImage : '/spinner.png',
       closeImage   : '/close.png',
       imageTypes   : [ 'png', 'jpg', 'jpeg', 'gif' ],
       faceboxHtml  : '\

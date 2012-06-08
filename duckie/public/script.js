@@ -19,45 +19,53 @@
 \*---------------------------------------------------------------------------*/
 
 
-var template = null;
-var jqXHR = null;
+Duckie = {
+  template: null,
+  jqXHR: null,
+
+  init: function() {
+    this.template = $('#result').remove().html();
+    $('#search').submit(this.search);
+    $("[name='query']").focus();
+  },
+
+  search: function() {
+    if (Duckie.jqXHR !== null) {
+      Duckie.jqXHR.abort();
+      console.log('aborted previous query');
+    }
+
+    var query = $("[name='query']").val().toLowerCase();
+    document.title = 'rubber duckie: ' + query;
+    $('.query').html(query);
+    $("[name='query']").val('');
+
+    $('.loading').show();
+    $('#results').empty();
+    $('.no-results').hide();
+
+    Duckie.jqXHR = $.getJSON('/search', {query: query}, function(data) {
+        Duckie.jqXHR = null;
+        $('.loading').hide();
+        $.each(data, Duckie.showResult);
+        if (data.length == 0) {
+          $('.no-results').show();
+        }
+      }
+    );
+    return false;
+  },
+
+  showResult: function(index, value) {
+    var result = $(Duckie.template);
+    result.find('a.photo').attr('href', value.full_size);
+    result.find('a.photo').facebox();
+    result.find('a.photo img.photo').attr('src', value.thumbnail);
+    result.appendTo('#results');
+  }
+};
 
 
 $(function() {
-  template = $('#result').remove().html();
-  $('#search').submit(search);
-  $("[name='query']").focus();
+  Duckie.init();
 });
-
-
-function search() {
-  if (jqXHR !== null) {
-    jqXHR.abort();
-    console.log('aborted previous query');
-  }
-
-  var query = $("[name='query']").val().toLowerCase();
-  document.title = 'rubber duckie: ' + query;
-  $('.query').html(query);
-  $("[name='query']").val('');
-  $('.loading').show();
-  $('#results').empty();
-  $('.no-results').hide();
-
-  jqXHR = $.getJSON('/search', {query: query}, function(data) {
-      jqXHR = null;
-      $('.loading').hide();
-      $.each(data, function(indexInArray, valueOfElement) {
-        var result = $(template);
-        result.find('a.photo').attr('href', valueOfElement.full_size);
-        result.find('a.photo').facebox();
-        result.find('a.photo img.photo').attr('src', valueOfElement.thumbnail);
-        result.appendTo('#results');
-      });
-      if (data.length == 0) {
-        $('.no-results').show();
-      }
-    }
-  );
-  return false;
-}
