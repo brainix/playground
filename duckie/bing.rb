@@ -33,14 +33,16 @@ module Bing
   ACCOUNT_KEY = 'vwg49S0132p4mwVBpBL4p4GXTAhQyXU9PJoLnzpsXnE='
   URL = 'https://api.datamarket.azure.com/Bing/Search/Image'
 
+  NUM_PAGES = 20
+  RESULTS_PER_PAGE = 50
+
   @@logger = Logger.new(STDOUT)
   @@logger.level = Logger::INFO
 
   def self.unsafe_search(query)
     threads, rated_r, rated_pg13 = [], [], []
     [false, true].each do |safe|
-      20.times do |offset|
-        offset *= 50
+      (0 .. (NUM_PAGES - 1) * RESULTS_PER_PAGE).step(RESULTS_PER_PAGE) do |offset|
         threads << Thread.new do
           Thread.current[:safe] = safe
           Thread.current[:photos] = search(query, safe, offset)
