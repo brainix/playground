@@ -19,10 +19,10 @@
 #-----------------------------------------------------------------------------#
 
 
+require 'haml'
 require 'json'
 require 'rubygems'
 require 'sinatra'
-require 'haml'
 
 load 'flickr.rb'
 
