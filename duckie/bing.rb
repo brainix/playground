@@ -42,7 +42,7 @@ module Bing
   def self.unsafe_search(query)
     threads, rated_r, rated_pg13 = [], [], []
     [false, true].each do |safe|
-      (0 .. (NUM_PAGES - 1) * RESULTS_PER_PAGE).step(RESULTS_PER_PAGE) do |offset|
+      0.step((NUM_PAGES - 1) * RESULTS_PER_PAGE, RESULTS_PER_PAGE) do |offset|
         threads << Thread.new do
           Thread.current[:safe] = safe
           Thread.current[:photos] = search(query, safe, offset)
