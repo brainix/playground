@@ -97,9 +97,11 @@ module Flickr
 
     def self.unsafe_search(query)
       threads, rated_r, rated_pg13, rated_pg = [], [], [], []
-      threads << Thread.new { rated_r = search(query, :rated_r) }
-      threads << Thread.new { rated_pg13 = search(query, :rated_pg13) }
-      threads << Thread.new { rated_pg = search(query, :rated_pg) }
+      ['rated_r', 'rated_pg13', 'rated_pg'].each do |rating|
+        threads << Thread.new do
+          eval("#{rating} = search(query, '#{rating}'.to_sym)")
+        end
+      end
       threads.each { |thread| thread.join }
 
       rated_r_only = rated_r - rated_pg13
