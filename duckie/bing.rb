@@ -36,6 +36,8 @@ module Bing
   NUM_PAGES = 20
   RESULTS_PER_PAGE = 50
 
+  MAX_RESULTS = 50
+
   @@logger = Logger.new(STDOUT)
   @@logger.level = Logger::INFO
 
@@ -58,6 +60,7 @@ module Bing
 
     rated_r_only = rated_r.reject { |photo| rated_pg13.include? photo }
     @@logger.info("#{query}: got #{rated_r_only.size} Rated R photos")
+    rated_r_only = rated_r_only[0 .. MAX_RESULTS - 1]
     rated_r_only
   end
 
