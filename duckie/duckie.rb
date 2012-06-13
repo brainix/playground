@@ -24,6 +24,7 @@ require 'json'
 require 'rubygems'
 require 'sinatra'
 
+load 'bing.rb'
 load 'flickr.rb'
 
 
@@ -39,6 +40,7 @@ end
 get '/search' do
   content_type :json
   query = params['query']
+  #results = Bing.unsafe_search(query)
   results = Flickr::Search.unsafe_search(query)
   results.to_json
 end

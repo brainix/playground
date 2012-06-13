@@ -135,6 +135,11 @@ img.photo:hover {
   opacity: 1.0;
 }
 
+#facebox img {
+  max-width: 640px;
+  max-height: 480px;
+}
+
 .no-results {
   display: none;
 }
