@@ -48,6 +48,7 @@ Duckie = {
         Duckie.jqXHR = null;
         $('.loading').hide();
         $.each(data, Duckie.showResult);
+        $('.lazy').lazyload();
         if (data.length == 0) {
           $('.no-results').show();
         }
@@ -60,7 +61,7 @@ Duckie = {
     var result = $(Duckie.template);
     result.find('a.photo').attr('href', value.full_size);
     result.find('a.photo').facebox();
-    result.find('a.photo img.photo').attr('src', value.thumbnail);
+    result.find('a.photo img.photo').attr('data-original', value.thumbnail);
     result.appendTo('#results');
   }
 };
