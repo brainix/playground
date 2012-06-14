@@ -27,6 +27,8 @@ Duckie = {
     this.template = $('#result').remove().html();
     $('#search').submit(this.search);
     $("[name='query']").focus();
+    $(document).keypress(this.keyPress);
+    $(document).scroll(this.scroll);
   },
 
   search: function() {
@@ -63,6 +65,25 @@ Duckie = {
     result.find('a.photo').facebox();
     result.find('a.photo img.photo').attr('data-original', value.thumbnail);
     result.appendTo('#results');
+  },
+
+  keyPress: function(eventObject) {
+    if (!$("[name='query']").is(':focus')) {
+      if (String.fromCharCode(eventObject.keyCode) === '/') {
+        window.scrollTo(0, 0);
+        return false;
+      }
+    } else {
+        window.scrollTo(0, 0);
+    }
+  },
+
+  scroll: function(eventObject) {
+    $.facebox.close();
+    var position = $('html').position();
+    if (position.left == 0 && position.top == 0) {
+      $("[name='query']").focus();
+    }
   }
 };
 
