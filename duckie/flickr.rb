@@ -21,10 +21,10 @@
 #-----------------------------------------------------------------------------#
 
 
-
 require 'flickraw'
 require 'logger'
 
+load 'timer.rb'
 
 
 module Flickr
@@ -33,7 +33,6 @@ module Flickr
 
   ACCESS_TOKEN = '72157629811083772-7ce62b48f55d76e6'
   ACCESS_SECRET = '8011fd19f6a0c19e'
-
 
 
   module Authorization
@@ -72,7 +71,6 @@ module Flickr
   end
 
 
-
   module Search
     MPAA_RATING_TO_FLICKR_SAFE_SEARCH_VALUE = {
       rated_pg: '1',
@@ -95,21 +93,24 @@ module Flickr
     end
 
     def self.unsafe_search(query)
-      threads, rated_r, rated_pg13, rated_pg = [], [], [], []
-      ['rated_r', 'rated_pg13', 'rated_pg'].each do |rating|
-        threads << Thread.new do
-          eval("#{rating} = search(query, '#{rating}'.to_sym)")
+      results = []
+      time = Timer.time do
+        threads, rated_r, rated_pg13, rated_pg = [], [], [], []
+        ['rated_r', 'rated_pg13', 'rated_pg'].each do |rating|
+          threads << Thread.new do
+            eval("#{rating} = search(query, '#{rating}'.to_sym)")
+          end
         end
-      end
-      threads.each { |thread| thread.join }
+        threads.each { |thread| thread.join }
 
-      rated_r_only = rated_r - rated_pg13
-      rated_pg13_only = rated_pg13 - rated_pg
-      results = rated_r_only + rated_pg13_only
-      @@logger.info("#{query}: got #{rated_r_only.size} Rated R and #{rated_pg13_only.size} Rated PG-13 photos")
-      results = results[0 .. MAX_RESULTS - 1]
-      results = ids_to_urls(results)
-      results.map! { |result| { thumbnail: result, full_size: result } }
+        rated_r_only = rated_r - rated_pg13
+        rated_pg13_only = rated_pg13 - rated_pg
+        results = rated_r_only + rated_pg13_only
+        results = results[0 .. MAX_RESULTS - 1]
+        results = ids_to_urls(results)
+        results.map! { |result| { thumbnail: result, full_size: result } }
+      end
+      @@logger.info("#{query}: got #{results.size} Rated R and PG-13 photos in #{'%.2f' % time} seconds")
       results
     end
 
@@ -142,7 +143,6 @@ module Flickr
     end
   end
 end
-
 
 
 if __FILE__ == $0

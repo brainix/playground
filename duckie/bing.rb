@@ -28,6 +28,8 @@ require 'net/https'
 require 'rexml/document'
 require 'URI'
 
+load 'timer.rb'
+
 
 module Bing
   ACCOUNT_KEY = 'vwg49S0132p4mwVBpBL4p4GXTAhQyXU9PJoLnzpsXnE='
@@ -42,7 +44,20 @@ module Bing
   @@logger.level = Logger::INFO
 
   def self.unsafe_search(query)
-    threads, rated_r, rated_pg13 = [], [], []
+    threads, rated_r_only = [], []
+    time = Timer.time do
+      threads = new_threads(query)
+      rated_r, rated_pg13 = join_threads(threads)
+      rated_r_only = rated_r.reject { |photo| rated_pg13.include? photo }
+      rated_r_only = rated_r_only[0 .. MAX_RESULTS - 1]
+    end
+    @@logger.info("#{query}: got #{rated_r_only.size} Rated R photos in #{'%.2f' % time} seconds")
+    rated_r_only
+  end
+
+  private
+  def self.new_threads(query)
+    threads = []
     [false, true].each do |safe|
       0.step((NUM_PAGES - 1) * RESULTS_PER_PAGE, RESULTS_PER_PAGE) do |offset|
         threads << Thread.new do
@@ -51,20 +66,19 @@ module Bing
         end
       end
     end
+    threads
+  end
 
+  def self.join_threads(threads)
+    rated_r, rated_pg13 = [], []
     threads.each do |thread|
       thread.join
       rated_r += thread[:photos] unless thread[:safe]
       rated_pg13 += thread[:photos] if thread[:safe]
     end
-
-    rated_r_only = rated_r.reject { |photo| rated_pg13.include? photo }
-    @@logger.info("#{query}: got #{rated_r_only.size} Rated R photos")
-    rated_r_only = rated_r_only[0 .. MAX_RESULTS - 1]
-    rated_r_only
+    return rated_r, rated_pg13
   end
 
-  private
   def self.search(query, safe, offset)
     query = build_query(query, safe, offset)
     url = URL + '?' + query
