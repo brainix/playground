@@ -22,9 +22,8 @@
 
 
 
-require 'logger'
-
 require 'flickraw'
+require 'logger'
 
 
 
@@ -81,7 +80,7 @@ module Flickr
       rated_r: '3',
     }
 
-    MAX_RESULTS = 50
+    MAX_RESULTS = 500
 
     @@logger = Logger.new(STDOUT)
     @@logger.level = Logger::INFO

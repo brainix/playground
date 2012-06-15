@@ -70,11 +70,15 @@ Duckie = {
   keyPress: function(eventObject) {
     if (!$("[name='query']").is(':focus')) {
       if (String.fromCharCode(eventObject.keyCode) === '/') {
+        $.facebox.close();
         window.scrollTo(0, 0);
+        $("[name='query']").focus();
         return false;
       }
     } else {
+        $.facebox.close();
         window.scrollTo(0, 0);
+        $("[name='query']").focus();
     }
   },
 
