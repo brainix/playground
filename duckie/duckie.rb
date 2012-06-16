@@ -39,8 +39,8 @@ end
 get '/search' do
   query = params['query']
   key = query.downcase.split.sort.join(' ')
-  value = Cache.lookup(key) { Flickr::Search.unsafe_search(query) }
+  value = Cache.lookup(key) { Flickr::Search.unsafe_search(query).to_json }
 
   content_type :json
-  value.to_json
+  value
 end

@@ -19,35 +19,18 @@
 #-----------------------------------------------------------------------------#
 
 
-require 'json'
 require 'redis'
 
 
 module Cache
   @@redis = Redis.new
-  @@connected = true
 
   def self.lookup(key)
-    @@redis, @@connected = Redis.new, true unless @@connected
-
-    begin
-      json = @@connected ? @@redis.get(key) : nil
-    rescue Redis::CannotConnectError
-      @@connected, json = false, nil
-    end
-
-    unless json.nil?
-      value = JSON.parse(json)
-    else
+    value = @@redis.get(key)
+    if value.nil?
       value = yield
-      json = value.to_json if @@connected
-      begin
-        @@redis.set(key, json) if @@connected
-      rescue Redis::CannotConnectError
-        @@connected = false
-      end
+      @@redis.set(key, value)
     end
-
     value
   end
 end
