@@ -28,6 +28,8 @@ module Cache
   @@connected = true
 
   def self.lookup(key)
+    @@redis, @@connected = Redis.new, true unless @@connected
+
     begin
       json = @@connected ? @@redis.get(key) : nil
     rescue Redis::CannotConnectError
