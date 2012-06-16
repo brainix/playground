@@ -107,6 +107,10 @@ input {
   }
 }
 
+.hidden {
+  display: none;
+}
+
 .frame-outer {
   display: inline-block;
   width: 150px;
@@ -132,6 +136,7 @@ img.photo {
 }
 
 img.photo:hover {
+  border: 1px solid #B62F2F;
   opacity: 1.0;
 }
 

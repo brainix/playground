@@ -38,7 +38,7 @@ Duckie = {
     }
 
     var query = $("[name='query']").val().toLowerCase();
-    document.title = 'rubber duckie: ' + query;
+    document.title = 'rubber duckie - ' + query;
     $('.query').html(query);
     $("[name='query']").val('');
 
@@ -79,6 +79,7 @@ Duckie = {
         $.facebox.close();
         window.scrollTo(0, 0);
         $("[name='query']").focus();
+        return String.fromCharCode(eventObject.keyCode) !== '/';
     }
   },
 
