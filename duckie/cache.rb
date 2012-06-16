@@ -41,7 +41,11 @@ module Cache
     else
       value = yield
       json = value.to_json if @@connected
-      @@redis.set(key, json) if @@connected
+      begin
+        @@redis.set(key, json) if @@connected
+      rescue Redis::CannotConnectError
+        @@connected = false
+      end
     end
 
     value
