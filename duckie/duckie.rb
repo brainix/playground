@@ -20,7 +20,6 @@
 
 
 require 'haml'
-require 'json'
 require 'rubygems'
 require 'sinatra'
 
