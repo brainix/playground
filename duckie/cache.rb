@@ -1,5 +1,5 @@
 #-----------------------------------------------------------------------------#
-#   duckie.rb                                                                 #
+#   cache.rb                                                                  #
 #                                                                             #
 #   Copyright (c) 2012, Rajiv Bakulesh Shah, original author.                 #
 #                                                                             #
@@ -19,29 +19,22 @@
 #-----------------------------------------------------------------------------#
 
 
-require 'haml'
 require 'json'
-require 'rubygems'
-require 'sinatra'
-
-load 'cache.rb'
-load 'flickr.rb'
+require 'redis'
 
 
-set :haml, :format => :html5
-Flickr::Search.log_in
+module Cache
+  @@redis = Redis.new
 
-
-get '/' do
-  haml :index
-end
-
-
-get '/search' do
-  query = params['query']
-  key = query.downcase.split.sort.join(' ')
-  value = Cache.lookup(key) { Flickr::Search.unsafe_search(query) }
-
-  content_type :json
-  value.to_json
+  def self.lookup(key)
+    json = @@redis.get(key)
+    if json.nil?
+      value = yield
+      json = value.to_json
+      @@redis.set(key, json)
+    else
+      value = JSON.parse(json)
+    end
+    value
+  end
 end

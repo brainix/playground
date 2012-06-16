@@ -38,7 +38,7 @@ module Bing
   NUM_PAGES = 20
   RESULTS_PER_PAGE = 50
 
-  MAX_RESULTS = 500
+  MAX_RESULTS = 100
 
   @@logger = Logger.new(STDOUT)
   @@logger.level = Logger::INFO

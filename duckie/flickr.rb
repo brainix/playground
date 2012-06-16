@@ -78,7 +78,7 @@ module Flickr
       rated_r: '3',
     }
 
-    MAX_RESULTS = 500
+    MAX_RESULTS = 100
 
     @@logger = Logger.new(STDOUT)
     @@logger.level = Logger::INFO
