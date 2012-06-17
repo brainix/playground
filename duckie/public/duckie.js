@@ -41,15 +41,23 @@ Duckie = {
   _search: function() {
     if (Duckie._jqXHR !== null) {
       Duckie._jqXHR.abort();
-      console.log('aborted previous query');
     }
 
     var query = $("[name='query']").val();
     query = query.toLowerCase().trim().replace(/ +/g, ' ');
-    if (!query) {
-      return false;
+    if (query) {
+      Duckie._preSearch(query);
+      Duckie._jqXHR = $.getJSON('/search', {query: query}, function(data) {
+          Duckie._jqXHR = null;
+          Duckie._postSearch(data);
+        }
+      );
     }
 
+    return false;
+  },
+
+  _preSearch: function(query) {
     document.title = 'rubber duckie - ' + query;
     $('.query').html(query);
     $("[name='query']").val('');
@@ -57,18 +65,18 @@ Duckie = {
     $('#loading').show();
     $('#results').empty();
     $('#no-results').hide();
+  },
 
-    Duckie._jqXHR = $.getJSON('/search', {query: query}, function(data) {
-        Duckie._jqXHR = null;
-        $('#loading').hide();
-        $.each(data, Duckie._showResult);
-        $('.lazy').lazyload();
-        if (data.length == 0) {
-          $('#no-results').show();
-        }
-      }
-    );
-    return false;
+  _postSearch: function(results) {
+    if (results.length !== 0) {
+      $("[name='query']").blur();
+    }
+    $('#loading').hide();
+    $.each(results, Duckie._showResult);
+    $('.lazy').lazyload();
+    if (results.length === 0) {
+      $('#no-results').show();
+    }
   },
 
   _showResult: function(index, value) {
@@ -88,7 +96,7 @@ Duckie = {
   _scroll: function(eventObject) {
     $.facebox.close();
     var position = $('html').position();
-    if (position.left == 0 && position.top == 0) {
+    if (position.left === 0 && position.top === 0) {
       $("[name='query']").focus();
     }
   }

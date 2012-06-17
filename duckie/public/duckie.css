@@ -94,7 +94,7 @@ input {
   -webkit-mask-image: url(/spinner.png);
   background-color: #516064;
   -webkit-animation: spinnerRotate;
-  -webkit-animation-duration: 3s;
+  -webkit-animation-duration: 2s;
   -webkit-animation-iteration-count: infinite;
   -webkit-animation-timing-function: linear;
 }
