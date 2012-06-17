@@ -46,17 +46,17 @@ Duckie = {
     $('.query').html(query);
     $("[name='query']").val('');
 
-    $('.loading').show();
+    $('#loading').show();
     $('#results').empty();
-    $('.no-results').hide();
+    $('#no-results').hide();
 
     Duckie._jqXHR = $.getJSON('/search', {query: query}, function(data) {
         Duckie._jqXHR = null;
-        $('.loading').hide();
+        $('#loading').hide();
         $.each(data, Duckie._showResult);
         $('.lazy').lazyload();
         if (data.length == 0) {
-          $('.no-results').show();
+          $('#no-results').show();
         }
       }
     );

@@ -86,7 +86,7 @@ input {
   width: 480px;
 }
 
-.loading {
+#loading {
   display: none;
   height: 200px;
   width: 200px;
@@ -145,7 +145,7 @@ img.photo:hover {
   max-height: 480px;
 }
 
-.no-results {
+#no-results {
   display: none;
 }
 
