@@ -25,6 +25,7 @@ Duckie = {
 
   init: function() {
     this.template = $('#result').remove().html();
+    $('#templates').remove()
     $('#search').submit(this.search);
     $("[name='query']").focus();
     $(document).keypress(this.keyPress);

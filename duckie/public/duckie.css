@@ -107,7 +107,7 @@ input {
   }
 }
 
-.hidden {
+#templates {
   display: none;
 }
 
@@ -130,13 +130,13 @@ img.photo {
   margin-right: auto;
   max-width: 120px;
   max-height: 120px;
-  border: 1px solid #959EA1;
+  border: 1px solid #D1D9DC;
   padding: 5px;
   opacity: 0.85;
 }
 
 img.photo:hover {
-  border: 1px solid #B62F2F;
+  border: 1px solid #959EA1;
   opacity: 1.0;
 }
 
@@ -147,4 +147,8 @@ img.photo:hover {
 
 .no-results {
   display: none;
+}
+
+footer {
+  padding-bottom: 3em;
 }

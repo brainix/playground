@@ -27,10 +27,9 @@ module Cache
 
   def self.lookup(key)
     value = @@redis.get(key)
-    if value.nil?
-      value = yield
-      @@redis.set(key, value)
-    end
+    return value unless value.nil?
+    value = yield
+    @@redis.set(key, value)
     value
   end
 end
