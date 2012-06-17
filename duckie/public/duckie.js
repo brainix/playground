@@ -20,24 +20,28 @@
 
 
 Duckie = {
-  template: null,
-  jqXHR: null,
+  _template: null,
+  _jqXHR: null,
 
   init: function() {
-    this.template = $('#result').remove().html();
+    this._template = $('#result').remove().html();
     $('#templates').remove()
-    $('#search').submit(this.search);
-    $(document).keypress(this.keyPress);
-    $(document).scroll(this.scroll);
+    $('#search').submit(this._search);
+    $(document).keypress(this._keyPress);
+    $(document).scroll(this._scroll);
   },
 
-  search: function() {
-    if (Duckie.jqXHR !== null) {
-      Duckie.jqXHR.abort();
+  _search: function() {
+    if (Duckie._jqXHR !== null) {
+      Duckie._jqXHR.abort();
       console.log('aborted previous query');
     }
 
-    var query = $("[name='query']").val().toLowerCase();
+    var query = $("[name='query']").val().toLowerCase().trim();
+    if (!query) {
+      return false;
+    }
+
     document.title = 'rubber duckie - ' + query;
     $('.query').html(query);
     $("[name='query']").val('');
@@ -46,10 +50,10 @@ Duckie = {
     $('#results').empty();
     $('.no-results').hide();
 
-    Duckie.jqXHR = $.getJSON('/search', {query: query}, function(data) {
-        Duckie.jqXHR = null;
+    Duckie._jqXHR = $.getJSON('/search', {query: query}, function(data) {
+        Duckie._jqXHR = null;
         $('.loading').hide();
-        $.each(data, Duckie.showResult);
+        $.each(data, Duckie._showResult);
         $('.lazy').lazyload();
         if (data.length == 0) {
           $('.no-results').show();
@@ -59,21 +63,21 @@ Duckie = {
     return false;
   },
 
-  showResult: function(index, value) {
-    var result = $(Duckie.template);
+  _showResult: function(index, value) {
+    var result = $(Duckie._template);
     result.find('a.photo').attr('href', value.full_size);
     result.find('a.photo').facebox();
     result.find('a.photo img.photo').attr('data-original', value.thumbnail);
     result.appendTo('#results');
   },
 
-  keyPress: function(eventObject) {
+  _keyPress: function(eventObject) {
     $.facebox.close();
     window.scrollTo(0, 0);
     $("[name='query']").focus();
   },
 
-  scroll: function(eventObject) {
+  _scroll: function(eventObject) {
     $.facebox.close();
     var position = $('html').position();
     if (position.left == 0 && position.top == 0) {
