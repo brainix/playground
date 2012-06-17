@@ -20,15 +20,22 @@
 
 
 Duckie = {
+  _initialized: false,
   _template: null,
   _jqXHR: null,
 
   init: function() {
-    this._template = $('#result').remove().html();
-    $('#templates').remove()
-    $('#search').submit(this._search);
-    $(document).keypress(this._keyPress);
-    $(document).scroll(this._scroll);
+    if (this._initialized) {
+      return false;
+    } else {
+      this._initialized = true;
+      this._template = $('#result').remove().html();
+      $('#templates').remove()
+      $('#search').submit(this._search);
+      $(document).keypress(this._keyPress);
+      $(document).scroll(this._scroll);
+      return true;
+    }
   },
 
   _search: function() {
