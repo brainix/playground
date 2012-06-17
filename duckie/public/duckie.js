@@ -1,5 +1,5 @@
 /*---------------------------------------------------------------------------*\
- |   script.js                                                               |
+ |   duckie.js                                                               |
  |                                                                           |
  |   Copyright (c) 2012, Rajiv Bakulesh Shah, original author.               |
  |                                                                           |
@@ -37,7 +37,8 @@ Duckie = {
       console.log('aborted previous query');
     }
 
-    var query = $("[name='query']").val().toLowerCase().trim();
+    var query = $("[name='query']").val();
+    query = query.toLowerCase().trim().replace(/ +/g, ' ');
     if (!query) {
       return false;
     }
