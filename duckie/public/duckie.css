@@ -145,7 +145,7 @@ img.photo:hover {
   max-height: 480px;
 }
 
-#no-results {
+#no-results, #broken {
   display: none;
 }
 

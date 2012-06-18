@@ -20,8 +20,11 @@
 
 
 Duckie = {
+  _TIMEOUT: 10000,
+
   _initialized: false,
   _template: null,
+  _brokenTimer: null,
   _jqXHR: null,
 
   init: function() {
@@ -39,15 +42,23 @@ Duckie = {
   },
 
   _search: function() {
+    if (Duckie._brokenTimer !== null) {
+      window.clearTimeout(Duckie._brokenTimer);
+      Duckie._brokenTimer = null;
+    }
     if (Duckie._jqXHR !== null) {
       Duckie._jqXHR.abort();
+      Duckie._jqXHR = null;
     }
 
     var query = $("[name='query']").val();
     query = query.toLowerCase().trim().replace(/ +/g, ' ');
     if (query) {
       Duckie._preSearch(query);
+      Duckie._brokenTimer = window.setTimeout(Duckie._broken, Duckie._TIMEOUT);
       Duckie._jqXHR = $.getJSON('/search', {query: query}, function(data) {
+          window.clearTimeout(Duckie._brokenTimer);
+          Duckie._brokenTimer = null;
           Duckie._jqXHR = null;
           Duckie._postSearch(data);
         }
@@ -65,6 +76,21 @@ Duckie = {
     $('#loading').show();
     $('#results').empty();
     $('#no-results').hide();
+    $('#broken').hide();
+  },
+
+  _broken: function() {
+    if (Duckie._brokenTimer !== null) {
+      window.clearTimeout(Duckie._brokenTimer);
+      Duckie._brokenTimer = null;
+    }
+    if (Duckie._jqXHR !== null) {
+      Duckie._jqXHR.abort();
+      Duckie._jqXHR = null;
+    }
+
+    $('#loading').hide();
+    $('#broken').show();
   },
 
   _postSearch: function(results) {
