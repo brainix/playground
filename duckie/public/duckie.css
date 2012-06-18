@@ -93,13 +93,13 @@ input {
   text-indent: 250px;
   -webkit-mask-image: url(/spinner.png);
   background-color: #516064;
-  -webkit-animation: spinnerRotate;
-  -webkit-animation-duration: 2s;
+  -webkit-animation: rotate-spinner;
+  -webkit-animation-duration: 2.5s;
   -webkit-animation-iteration-count: infinite;
   -webkit-animation-timing-function: linear;
 }
 
-@-webkit-keyframes spinnerRotate {
+@-webkit-keyframes rotate-spinner {
   from {
     -webkit-transform: rotate(0deg);
   } to {
