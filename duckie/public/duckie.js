@@ -22,41 +22,51 @@
 Duckie = {
   _TIMEOUT: 10000,
 
-  _initialized: false,
   _template: null,
   _brokenTimer: null,
   _jqXHR: null,
+  _initialized: false,
+
 
   init: function() {
     if (this._initialized) {
+      // We'd previously been initialized.
       return false;
-    } else {
-      this._initialized = true;
-      this._template = $('#result').remove().html();
-      $('#templates').remove()
-      $('#search').submit(this._search);
-      $(document).keypress(this._keyPress);
-      $(document).scroll(this._scroll);
-      return true;
     }
+
+    // Get the photo result template.
+    this._template = $('#result').remove().html();
+    $('#templates').remove()
+
+    // Wire up the event handlers.
+    $('#search').submit(this._search);
+    $(document).keypress(this._keyPress);
+    $(document).scroll(this._scroll);
+
+    // We're now initialized.
+    return this._initialized = true;
   },
 
+
   _search: function() {
-    Duckie._abort();
     var query = $("[name='query']").val();
     query = query.toLowerCase().trim().replace(/ +/g, ' ');
-    if (query) {
-      Duckie._preSearch(query);
-      Duckie._brokenTimer = window.setTimeout(Duckie._broken, Duckie._TIMEOUT);
-      Duckie._jqXHR = $.getJSON('/search', {query: query}, function(data) {
-          Duckie._abort();
-          Duckie._postSearch(data);
-        }
-      );
+    if (!query) {
+      return false;
     }
+
+    Duckie._abort();
+    Duckie._preSearch(query);
+    Duckie._brokenTimer = window.setTimeout(Duckie._broken, Duckie._TIMEOUT);
+    Duckie._jqXHR = $.getJSON('/search', {query: query}, function(data) {
+        Duckie._abort();
+        Duckie._postSearch(data);
+      }
+    );
 
     return false;
   },
+
 
   _abort: function() {
     if (this._brokenTimer !== null) {
@@ -70,6 +80,7 @@ Duckie = {
     }
   },
 
+
   _preSearch: function(query) {
     document.title = 'rubber duckie - ' + query;
     $('.query').html(query);
@@ -81,16 +92,19 @@ Duckie = {
     $('#broken').hide();
   },
 
+
   _broken: function() {
     Duckie._abort();
     $('#loading').hide();
     $('#broken').show();
   },
 
+
   _postSearch: function(results) {
     if (results.length !== 0) {
       $("[name='query']").blur();
     }
+
     $('#loading').hide();
     $.each(results, this._showResult);
     $('.lazy').lazyload();
@@ -98,6 +112,7 @@ Duckie = {
       $('#no-results').show();
     }
   },
+
 
   _showResult: function(index, value) {
     var result = $(Duckie._template);
@@ -107,11 +122,13 @@ Duckie = {
     result.appendTo('#results');
   },
 
+
   _keyPress: function(eventObject) {
     $.facebox.close();
     window.scrollTo(0, 0);
     $("[name='query']").focus();
   },
+
 
   _scroll: function(eventObject) {
     $.facebox.close();
