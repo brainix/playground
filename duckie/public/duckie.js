@@ -42,30 +42,32 @@ Duckie = {
   },
 
   _search: function() {
-    if (Duckie._brokenTimer !== null) {
-      window.clearTimeout(Duckie._brokenTimer);
-      Duckie._brokenTimer = null;
-    }
-    if (Duckie._jqXHR !== null) {
-      Duckie._jqXHR.abort();
-      Duckie._jqXHR = null;
-    }
-
+    Duckie._abort();
     var query = $("[name='query']").val();
     query = query.toLowerCase().trim().replace(/ +/g, ' ');
     if (query) {
       Duckie._preSearch(query);
       Duckie._brokenTimer = window.setTimeout(Duckie._broken, Duckie._TIMEOUT);
       Duckie._jqXHR = $.getJSON('/search', {query: query}, function(data) {
-          window.clearTimeout(Duckie._brokenTimer);
-          Duckie._brokenTimer = null;
-          Duckie._jqXHR = null;
+          Duckie._abort();
           Duckie._postSearch(data);
         }
       );
     }
 
     return false;
+  },
+
+  _abort: function() {
+    if (this._brokenTimer !== null) {
+      window.clearTimeout(this._brokenTimer);
+      this._brokenTimer = null;
+    }
+
+    if (this._jqXHR !== null) {
+      this._jqXHR.abort();
+      this._jqXHR = null;
+    }
   },
 
   _preSearch: function(query) {
@@ -80,15 +82,7 @@ Duckie = {
   },
 
   _broken: function() {
-    if (Duckie._brokenTimer !== null) {
-      window.clearTimeout(Duckie._brokenTimer);
-      Duckie._brokenTimer = null;
-    }
-    if (Duckie._jqXHR !== null) {
-      Duckie._jqXHR.abort();
-      Duckie._jqXHR = null;
-    }
-
+    Duckie._abort();
     $('#loading').hide();
     $('#broken').show();
   },
@@ -98,7 +92,7 @@ Duckie = {
       $("[name='query']").blur();
     }
     $('#loading').hide();
-    $.each(results, Duckie._showResult);
+    $.each(results, this._showResult);
     $('.lazy').lazyload();
     if (results.length === 0) {
       $('#no-results').show();
