@@ -1,3 +1,5 @@
+#!/usr/bin/env ruby
+
 #-----------------------------------------------------------------------------#
 #   cache.rb                                                                  #
 #                                                                             #
@@ -32,4 +34,10 @@ module Cache
     @@redis.set(key, value)
     value
   end
+end
+
+
+if __FILE__ == $0
+  redis = Redis.new
+  redis.keys.each { |key| puts key }
 end
