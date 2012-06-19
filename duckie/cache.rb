@@ -30,6 +30,7 @@ module Cache
   def self.lookup(key)
     value = @@redis.get(key)
     return value unless value.nil?
+
     value = yield
     @@redis.set(key, value)
     value
