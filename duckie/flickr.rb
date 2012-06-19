@@ -43,6 +43,7 @@ module Flickr
     end
 
     private
+
     def self.get_auth_url
       FlickRaw.api_key = API_KEY
       FlickRaw.shared_secret = API_SECRET
@@ -115,6 +116,7 @@ module Flickr
     end
 
     private
+
     def self.search(query, mpaa_rating)
       results = flickr.photos.search(
         text: query,
