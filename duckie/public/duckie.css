@@ -80,9 +80,8 @@ input {
   border: 1px solid #959EA1;
   color: #B62F2F;
   font: 16px "HelveticaNeue-Light", "Helvetica Neue Light", "Helvetica Neue", Helvetica, arial, sans-serif;
-  line-height: 150%;
   margin-top: 0.75em;
-  padding: 0.2em;
+  padding: 0.4em 0.2em;
   width: 480px;
 }
 
