@@ -43,6 +43,8 @@ Duckie = {
     $(document).keypress(this._keyPress);
     $(document).scroll(this._scroll);
 
+    $('#loading').hide();
+
     // We're now initialized.
     return this._initialized = true;
   },

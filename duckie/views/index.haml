@@ -39,10 +39,10 @@
       %form#search{method: "get", action: "/search", autocomplete: "off"}
         %fieldset
           %input{name: "query", type: "text", autofocus: ""}
+          %p#loading
+            Searching&hellip;
 
     %article
-      %p#loading
-        Searching&hellip;
       #results
       #templates
         #result
