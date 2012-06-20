@@ -140,6 +140,22 @@ img.photo:hover {
   opacity: 1.0;
 }
 
+.zoom { 
+  -webkit-transition: all .1s ease-out; 
+  -moz-transition: all .1s ease-out; 
+  -o-transition: all .1s ease-out; 
+  transition: all .1s ease-out;
+}
+
+.zoom:hover { 
+  -webkit-transform: scale(1.05);
+  -moz-transform: scale(1.05);
+  -o-transform: scale(1.05);
+  transform: scale(1.05);
+  -ms-transform: scale(1.05);
+  filter: progid:DXImageTransform.Microsoft.Matrix(sizingMethod='auto expand', M11=1.05, M12=-0, M21=0, M22=1.05);
+}
+
 #facebox img {
   max-width: 640px;
   max-height: 480px;

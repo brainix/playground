@@ -46,10 +46,10 @@
       #results
       #templates
         #result
-          .frame-outer
+          .frame-outer.zoom
             .frame-inner
-              %a{class: "photo", rel: "facebox", href: "/spacer.gif"}
-                %img{class: "photo lazy", "data-original" => "/spacer.gif", src: "/spacer.gif", alt: "result"}
+              %a.photo{rel: "facebox", href: "/spacer.gif"}
+                %img.photo.lazy{"data-original" => "/spacer.gif", src: "/spacer.gif", alt: "result"}
       %h3#no-results
         No naughty photos related to &ldquo;<span class="query"></span>&rdquo;
       %h3#broken
