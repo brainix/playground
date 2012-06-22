@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 #-----------------------------------------------------------------------------#
-#   bing_unsafe.rb                                                            #
+#   bing.rb                                                                   #
 #                                                                             #
 #   Copyright (c) 2012, Rajiv Bakulesh Shah, original author.                 #
 #                                                                             #
@@ -27,7 +27,7 @@ require 'logger'
 load 'timer.rb'
 
 
-module BingUnsafe
+module Bing
   NUM_PAGES = BingImages::NUM_PAGES
   RESULTS_PER_PAGE = BingImages::RESULTS_PER_PAGE
   MAX_RESULTS = 100
@@ -76,6 +76,6 @@ end
 
 if __FILE__ == $0
   query = ARGV.join(' ')
-  photos = BingUnsafe.unsafe_search(query)
+  photos = Bing.unsafe_search(query)
   puts photos
 end
