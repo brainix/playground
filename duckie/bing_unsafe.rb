@@ -21,15 +21,15 @@
 #-----------------------------------------------------------------------------#
 
 
+require 'bing_images'
 require 'logger'
 
-load 'bing.rb'
 load 'timer.rb'
 
 
-module BingUnsafeSearch
-  NUM_PAGES = Bing::NUM_PAGES
-  RESULTS_PER_PAGE = Bing::RESULTS_PER_PAGE
+module BingUnsafe
+  NUM_PAGES = BingImages::NUM_PAGES
+  RESULTS_PER_PAGE = BingImages::RESULTS_PER_PAGE
   MAX_RESULTS = 100
 
   @@logger = Logger.new(STDOUT)
@@ -55,7 +55,7 @@ module BingUnsafeSearch
       0.step((NUM_PAGES - 1) * RESULTS_PER_PAGE, RESULTS_PER_PAGE) do |offset|
         threads << Thread.new do
           Thread.current[:safe] = safe
-          Thread.current[:photos] = Bing.search(query, safe, offset)
+          Thread.current[:photos] = BingImages.search(query, safe, offset)
         end
       end
     end
@@ -76,6 +76,6 @@ end
 
 if __FILE__ == $0
   query = ARGV.join(' ')
-  photos = BingUnsafeSearch.unsafe_search(query)
+  photos = BingUnsafe.unsafe_search(query)
   puts photos
 end
