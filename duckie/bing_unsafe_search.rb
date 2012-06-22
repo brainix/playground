@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 #-----------------------------------------------------------------------------#
-#   bing.rb                                                                   #
+#   bing_unsafe_search.rb                                                     #
 #                                                                             #
 #   Copyright (c) 2012, Rajiv Bakulesh Shah, original author.                 #
 #                                                                             #
@@ -21,68 +21,61 @@
 #-----------------------------------------------------------------------------#
 
 
-require 'addressable/uri'
-require 'net/http'
-require 'net/https'
-require 'rexml/document'
-require 'URI'
+require 'logger'
+
+load 'bing.rb'
+load 'timer.rb'
 
 
-module Bing
-  ACCOUNT_KEY = 'vwg49S0132p4mwVBpBL4p4GXTAhQyXU9PJoLnzpsXnE='
-  URL = 'https://api.datamarket.azure.com/Bing/Search/Image'
+module BingUnsafeSearch
+  NUM_PAGES = Bing::NUM_PAGES
+  RESULTS_PER_PAGE = Bing::RESULTS_PER_PAGE
+  MAX_RESULTS = 100
 
-  NUM_PAGES = 20
-  RESULTS_PER_PAGE = 50
+  @@logger = Logger.new(STDOUT)
+  @@logger.level = Logger::INFO
 
-  def self.search(query, safe, offset)
-    query = build_query(query, safe, offset)
-    url = URL + '?' + query
-    xml = issue_request(url)
-    results = parse_xml(xml)
-    results
+  def self.unsafe_search(query)
+    threads, rated_r_only = [], []
+    time = Timer.time do
+      threads = new_threads(query)
+      rated_r, rated_pg13 = join_threads(threads)
+      rated_r_only = rated_r.reject { |photo| rated_pg13.include? photo }
+      rated_r_only = rated_r_only[0 .. MAX_RESULTS - 1]
+    end
+    @@logger.info("#{query}: got #{rated_r_only.size} Rated R photos in #{'%.2f' % time} seconds")
+    rated_r_only
   end
 
   private
 
-  def self.build_query(query, safe, offset)
-    uri = Addressable::URI.new
-    uri.query_values = {
-      Query: "'" + query + "'",
-      Adult: "'" + (safe ? 'Moderate' : 'Off') + "'",
-      '$skip' => offset,
-    }
-    uri.query
-  end
-
-  def self.issue_request(url)
-    uri = URI(url)
-    http = Net::HTTP.new(uri.host, uri.port)
-    http.use_ssl = uri.scheme == 'https'
-    query = uri.query.nil? ? '' : ('?' + uri.query)
-    request = Net::HTTP::Get.new(uri.path + query)
-    request.basic_auth('', ACCOUNT_KEY)
-    response = http.request(request)
-    response.body
-  end
-
-  def self.parse_xml(xml)
-    doc = REXML::Document.new(xml)
-    results = []
-    doc.elements.each('feed/entry/content/m:properties') do |element|
-      result = {
-        thumbnail: (element.elements.each('d:Thumbnail/d:MediaUrl') {})[0].get_text,
-        full_size: (element.elements.each('d:MediaUrl') {})[0].get_text,
-      }
-      results << result
+  def self.new_threads(query)
+    threads = []
+    [false, true].each do |safe|
+      0.step((NUM_PAGES - 1) * RESULTS_PER_PAGE, RESULTS_PER_PAGE) do |offset|
+        threads << Thread.new do
+          Thread.current[:safe] = safe
+          Thread.current[:photos] = Bing.search(query, safe, offset)
+        end
+      end
     end
-    results
+    threads
+  end
+
+  def self.join_threads(threads)
+    rated_r, rated_pg13 = [], []
+    threads.each do |thread|
+      thread.join
+      rated_r += thread[:photos] unless thread[:safe]
+      rated_pg13 += thread[:photos] if thread[:safe]
+    end
+    return rated_r, rated_pg13
   end
 end
 
 
 if __FILE__ == $0
   query = ARGV.join(' ')
-  photos = Bing.search(query, false, 0)
+  photos = BingUnsafeSearch.unsafe_search(query)
   puts photos
 end
