@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 #-----------------------------------------------------------------------------#
-#   bing_unsafe_search.rb                                                     #
+#   bing_unsafe.rb                                                            #
 #                                                                             #
 #   Copyright (c) 2012, Rajiv Bakulesh Shah, original author.                 #
 #                                                                             #
