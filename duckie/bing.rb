@@ -47,8 +47,6 @@ module Bing
     rated_r_only
   end
 
-  private
-
   def self.new_threads(query)
     threads = []
     [false, true].each do |safe|

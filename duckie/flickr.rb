@@ -42,8 +42,6 @@ module Flickr
       log_in(token, verifier)
     end
 
-    private
-
     def self.get_auth_url
       FlickRaw.api_key = API_KEY
       FlickRaw.shared_secret = API_SECRET
@@ -114,8 +112,6 @@ module Flickr
       @@logger.info("#{query}: got #{results.size} Rated R and PG-13 photos in #{'%.2f' % time} seconds")
       results
     end
-
-    private
 
     def self.search(query, mpaa_rating)
       results = flickr.photos.search(
