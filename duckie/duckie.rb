@@ -20,6 +20,7 @@
 
 
 require 'haml'
+require 'redis'
 require 'sinatra'
 
 load 'cache.rb'
@@ -28,6 +29,14 @@ load 'flickr.rb'
 
 set :haml, :format => :html5
 Flickr::Search.log_in
+
+
+configure do
+  url = ENV['REDISTOGO_URL']
+  url = 'http://localhost:6379/' if url.nil?
+  uri = URI.parse(url)
+  REDIS = Redis.new(host: uri.host, port: uri.port, password: uri.password)
+end
 
 
 get '/' do
