@@ -20,7 +20,6 @@
 
 
 require 'haml'
-require 'rubygems'
 require 'sinatra'
 
 load 'cache.rb'
