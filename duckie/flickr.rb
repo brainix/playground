@@ -21,7 +21,7 @@
 #-----------------------------------------------------------------------------#
 
 
-require 'flickraw'
+require 'flickraw-cached'
 require 'logger'
 
 load 'timer.rb'

@@ -1,0 +1,8 @@
+source 'http://rubygems.org'
+
+gem 'haml'
+gem 'redis'
+gem 'rubygems'
+gem 'sinatra'
+
+gem 'flickraw-cached'
