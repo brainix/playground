@@ -1,7 +1,7 @@
 #!/usr/bin/env ruby
 
 #-----------------------------------------------------------------------------#
-#   pangram3.rb                                                               #
+#   betteridge.rb                                                             #
 #                                                                             #
 #   Copyright (c) 2012, Rajiv Bakulesh Shah, original author.                 #
 #                                                                             #
@@ -21,44 +21,27 @@
 #-----------------------------------------------------------------------------#
 
 
-require 'rake'
-require 'set'
+require 'open-uri'
+require 'rss'
 
 
-# We're going to monkey patch our own pangram? method into Ruby's String class.
-# However, we want to do this in a kind, gentle way.  Therefore, we're going to
-# create a module, with our own String class, with our method that we're going
-# to tack on Ruby's String class.  We jump through these hoops so that
-# String.ancestors shows our module to help others debug.
-#
-# For more information, see:
-#   http://johnragan.wordpress.com/2010/02/22/safer-monkey-patching/
-
-module Pangram
-  module String
-    rake_extension('pangram?') do
-      def pangram?
-        letters = self.downcase
-        letters.gsub!(/[^a-z]/, '')
-        letters = letters.chars
-        letters = Set.new(letters)
-        letters.size == 26
-      end
-    end
-  end
-end
+FEED = 'http://feeds.foxnews.com/foxnews/latest'
+#FEED = 'http://news.google.com/?output=rss'
 
 
-class String
-  include Pangram::String
-end
+xml = ''
+open(FEED) { |f| xml = f.read }
+rss = RSS::Parser.parse(xml, false)
+
+
+questions = []
+rss.items.each { |item| questions << item.title if item.title =~ /^(.*)\?$/ }
+
+
+tweets = []
+questions.each { |question| tweets << question + ' Nope!' }
 
 
 if __FILE__ == $0
-  sentence = ARGV.join(' ')
-  if sentence.pangram?
-    puts('is a pangram')
-  else
-    puts('is NOT a pangram')
-  end
+  tweets.each { |tweet| puts tweet }
 end
