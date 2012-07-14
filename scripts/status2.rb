@@ -27,25 +27,26 @@ require 'appscript'
 module Safari
   @app = Appscript.app('Safari')
 
-  def self.get_pages
-    tabs, pages = get_tabs, []
-    tabs.each do |tab|
-      page = {
-        url: tab.URL.get,
-        title: tab.name.get,
-      }
-      pages << page
+  class << self
+    def get_pages
+      tabs, pages = get_tabs, []
+      tabs.each do |tab|
+        page = {
+          url: tab.URL.get,
+          title: tab.name.get,
+        }
+        pages << page
+      end
+      pages
     end
-    pages
-  end
 
-  private
-  def self.get_tabs
-    windows, tabs = @app.windows.get, []
-    windows.each do |window|
-      tabs += window.tabs.get
+    def get_tabs
+      windows, tabs = @app.windows.get, []
+      windows.each do |window|
+        tabs += window.tabs.get
+      end
+      tabs
     end
-    tabs
   end
 end
 
