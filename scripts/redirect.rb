@@ -37,7 +37,6 @@ module Redirect
     redirect.follow
   end
 
-  private
   class Redirect
     @@logger = Logger.new(STDOUT)
     @@logger.level = Logger::DEBUG
