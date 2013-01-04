@@ -82,8 +82,8 @@ autocmd BufWritePost ~/.vimrc source ~/.vimrc
 " redrawing.
 set ttyfast
 
-colorscheme ir_black
 set background=dark
+colorscheme elflord
 set ruler
 syntax on
 set nowrap
