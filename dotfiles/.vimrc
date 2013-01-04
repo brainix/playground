@@ -1,7 +1,7 @@
 "----------------------------------------------------------------------------"
 "   .vimrc                                                                   "
 "                                                                            "
-"   Copyright (c) 2012, Rajiv Bakulesh Shah, original author.                "
+"   Copyright (c) 2012-2013, Rajiv Bakulesh Shah, original author.           "
 "                                                                            "
 "       This file is free software; you can redistribute it and/or modify    "
 "       it under the terms of the GNU General Public License as published    "
@@ -91,3 +91,9 @@ set nowrap
 
 " Disable annoying beeps and flashes.
 set noerrorbells visualbell t_vb=
+
+
+
+" Initialize pathogen.vim, which allows us to easily install plugins and
+" runtime files in their own private directories.
+call pathogen#infect()
