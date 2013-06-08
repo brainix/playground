@@ -97,4 +97,4 @@ set noerrorbells visualbell t_vb=
 
 " Initialize pathogen.vim, which allows us to easily install plugins and
 " runtime files in their own private directories.
-call pathogen#infect()
+execute pathogen#infect()
