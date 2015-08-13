@@ -58,9 +58,9 @@ filetype indent on
 " Configure sane tab behavior...
 set expandtab
 
-set shiftwidth=2
-set softtabstop=2
-set tabstop=2
+set shiftwidth=4
+set softtabstop=4
+set tabstop=4
 
 set smarttab
 set autoindent
