@@ -78,6 +78,10 @@ autocmd BufWritePost ~/.vimrc source ~/.vimrc
 
 
 
+" Redraw the screen only when we need (and not, e.g., in the middle of
+" macro execution).
+set lazyredraw
+
 " We're on a fast terminal connection, so send more characters for smoother
 " redrawing.
 set ttyfast
